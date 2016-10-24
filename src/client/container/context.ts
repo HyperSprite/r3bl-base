@@ -26,41 +26,41 @@ const events = require("events");
  * 2) LE_SET_DATA
  */
 class ApplicationContext {
-  
+
   public sessionId;
   public socket;
   public firebase;
   public eventEmitter;
   public reduxStore;
-  
+
   constructor() {
-    
+
     // init redux reduxStore
     this.initReduxStore();
-    
+
     // init firebase
     this.initFirebase();
-    
+
     // setup websocket (used for group chat)
     this.initSocket();
-    
+
     // unique session id
     this.sessionId = lodash.random(0, new Date().getTime(), false);
-    
+
     // create event emitter
     this.initEventEmitter();
-    
+
     // setup firebase auth
     persistence.initAuth(this);
-    
+
     // setup firebase presence
     presence.initPresence(this);
-    
+
   }
-  
+
   isProduction() {
     const hostname = window.location.hostname;
-    
+
     if (!lodash.isEqual(hostname, "localhost")) {
       // prod app
       return true;
@@ -69,11 +69,11 @@ class ApplicationContext {
       return false;
     }
   }
-  
+
   isDevelopment() {
     return !this.isProduction();
   }
-  
+
   /**
    * this generates a different URL depending on whether the code is running on
    * localhost or not.
@@ -83,22 +83,23 @@ class ApplicationContext {
    * production environment and tries to connect to "/".
    * @returns {string}
    */
-  getSocketURL() {
-    let socketURL = "http://localhost:8080";
-    if (this.isProduction()) {
-      socketURL = "/";
-    }
-    return socketURL;
-  }
-  
+  // getSocketURL() {
+  //   let socketURL = "http://localhost:8080";
+  //   if (this.isProduction()) {
+  //     socketURL = "/";
+  //   }
+  //   return socketURL;
+  // }
+  // No longer needed
+
   /**
    * this sets up the socket object for use by this context
    */
   initSocket() {
     let io = require("socket.io-client");
-    this.socket = new io.connect(this.getSocketURL());
+    this.socket = new io.connect();
   }
-  
+
   /**
    * to access the socket for this context use this method ... you can emit()
    * using it, and you can attach on() listeners to this as well ... if you attach
@@ -109,7 +110,7 @@ class ApplicationContext {
   getSocket() {
     return this.socket;
   }
-  
+
   /**
    * this returns an ephermeral session id for this session ... will change every
    * time this session is restarted (ApplicationContext is created).
@@ -118,7 +119,7 @@ class ApplicationContext {
   getSessionId() {
     return this.sessionId;
   }
-  
+
   /**
    * is true if the user object is set, and it contains a uid field.
    * you can get the user object from getUser()
@@ -137,7 +138,7 @@ class ApplicationContext {
       return false;
     }
   }
-  
+
   /**
    * get a reference to the saved user object
    * @returns {UserIF}
@@ -149,7 +150,7 @@ class ApplicationContext {
       return null;
     }
   }
-  
+
   /** gets the uid field of the userObject */
   getUserId() {
     try {
@@ -158,7 +159,7 @@ class ApplicationContext {
       return null;
     }
   }
-  
+
   /**
    * get a reference to the saved data object
    * @returns {DataIF}
@@ -166,25 +167,25 @@ class ApplicationContext {
   getData(): DataIF {
     return this.getReduxState().data;
   }
-  
+
   /** this tells firebase to start sign-in using Google (vs anon auth) */
   forceSignIn() {
     persistence.forceSignIn(this);
   }
-  
+
   /** this tells firebase to initiate sign-out (of users who came in thru any
    *  auth providers - Google and anon) */
   forceSignOut() {
     persistence.forceSignOut(this);
   }
-  
+
   /** setup the internal firebase object */
   initFirebase() {
     this.firebase = require("firebase");
     const config = require('../../global/constants').FIREBASE_CONFIG;
     this.firebase.initializeApp(config);
   }
-  
+
   /**
    * get a ref to the firebase instance
    * @returns {firebase|*}
@@ -192,14 +193,14 @@ class ApplicationContext {
   getFirebase() {
     return this.firebase;
   }
-  
+
   /** this is a convenience method that allows you to get the firebase server
    * timestamp object
    */
   getFirebaseServerTimestampObject() {
     return this.firebase.database.ServerValue.TIMESTAMP
   }
-  
+
   /**
    * get a ref to the firebase.database() instance
    * @returns {*|firebase.database.Database|!firebase.database.Database}
@@ -207,17 +208,17 @@ class ApplicationContext {
   getDatabase() {
     return this.firebase.database();
   }
-  
+
   /** creates the event emitter */
   initEventEmitter() {
     this.eventEmitter = new events.EventEmitter();
   }
-  
+
   /** disconnect the socket connection */
   disconnectSocket() {
     this.socket.disconnect();
   }
-  
+
   /** convenience method to emit an event to the server */
   emitToServer(eventName, payload) {
     if (LOGGING_ENABLED) {
@@ -226,7 +227,7 @@ class ApplicationContext {
     }
     this.socket.emit(eventName, payload);
   }
-  
+
   /** convenience method to emit an event */
   emit(eventName, payload) {
     if (LOGGING_ENABLED) {
@@ -235,7 +236,7 @@ class ApplicationContext {
     }
     this.eventEmitter.emit(eventName, payload);
   }
-  
+
   /** convenience method to listen to event
    * @returns the listener that is passed as param
    */
@@ -246,25 +247,25 @@ class ApplicationContext {
       }
       listener.apply(this, arguments);
     }
-    
+
     this.eventEmitter.addListener(
       eventName, logging_listener
     );
     return logging_listener;
   }
-  
+
   /** convenience method to remove listener for event */
   removeListener(eventName, listener) {
     this.eventEmitter.removeListener(eventName, listener);
   }
-  
+
   /**
    * initialize the redux store and get the actions and reducers wired up to it
    * this also tests to see if the browser is inDevelopment and if so, it will try and
    * use the Redux Chrome Dev Tools Extension.
    */
   initReduxStore() {
-    
+
     try {
       this.reduxStore = createStore(
         reducers.reducer_main,
@@ -277,10 +278,10 @@ class ApplicationContext {
         null
       );
     }
-  
+
     // explicitly INIT Redux!
     this.reduxStore.dispatch(actions.action_init());
-    
+
     /**
      * this enables the use of redux dev tools in Chrome if you have the
      * Chrome extension installed - https://goo.gl/xU4D6P
@@ -301,9 +302,9 @@ class ApplicationContext {
     //     null
     //   );
     // }
-    
+
   }
-  
+
   /**
    * get a reference to the redux store
    * @returns {any}
@@ -311,7 +312,7 @@ class ApplicationContext {
   getReduxStore() {
     return this.reduxStore;
   }
-  
+
   /**
    * get a reference to the redux state
    * @returns {S}
@@ -319,7 +320,7 @@ class ApplicationContext {
   getReduxState(): ReduxStateIF {
     return this.reduxStore.getState();
   }
-  
+
 }
 
 function _dispatchAction(action, ctx) {
@@ -336,7 +337,7 @@ function bindActionCreators(actionCreators, dispatch, ctx) {
   if (typeof actionCreators === 'function') {
     return _bindActionCreator(actionCreators, dispatch, ctx);
   }
-  
+
   if (typeof actionCreators !== 'object' || actionCreators === null) {
     throw new Error(
       'bindActionCreators expected an object or a function, instead received ' +
@@ -345,7 +346,7 @@ function bindActionCreators(actionCreators, dispatch, ctx) {
       ' actions from"?'
     );
   }
-  
+
   var keys = Object.keys(actionCreators);
   var boundActionCreators = {};
   for (var i = 0; i < keys.length; i++) {

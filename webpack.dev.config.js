@@ -3,15 +3,24 @@ const path = require('path');
 
 module.exports = {
   devtool: 'source-map',
+  context: __dirname,
   entry: [
     // Set up an ES6-ish environment
     'babel-polyfill',
     // Add your application's scripts below
+    'webpack/hot/dev-server',
+    'webpack-hot-middleware/client',
     './src/client/main.js',
   ],
   output: {
-    path: './src/server/static_content/assets/',
+    // path: `${__dirname}/../static_content/assets/`,
+    path: '/../../static_content/assets/',
+    // path: '/src/server/static_content/assets/',
+    // path: dirname + '/assets/',
+    // path: '/',
+    // publicPath: '/../../static_content/assets/',
     publicPath: '/assets/',
+    // publicPath: `${__dirname}/../static_content/assets/`,
     filename: 'bundle.js',
   },
   resolve: {
@@ -26,16 +35,7 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production'),
-      },
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: true,
-      },
-    }),
+
   ],
   module: {
     loaders: [

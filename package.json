@@ -41,11 +41,13 @@
     "ts-loader": "^0.8.2",
     "typescript": "^2.0.3",
     "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-middleware": "^1.8.4",
+    "webpack-hot-middleware": "^2.13.0"
   },
   "scripts": {
-    "dev": "webpack-dev-server --content-base src/server/static_content/ & node_modules/.bin/nodemon src/server/main/server_main.js",
-    "postinstall": "webpack -p",
+    "test": "node_modules/.bin/nodemon src/server/main/server_main.js test=true",
+    "dev": "node_modules/.bin/nodemon src/server/main/server_main.js",
+    "postinstall": "webpack -p --progress",
     "start": "NODE_ENV=production node src/server/main/server_main.js"
   },
   "author": "Nazmul Idris",
