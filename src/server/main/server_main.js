@@ -32,15 +32,6 @@ if (isSSL) {
   });
 }
 
-function NoLogOutputPlugin() {}
-
-NoLogOutputPlugin.prototype.apply = function (compiler) {
-  compiler.plugin('should-emit', function(compilation) {
-    if(compilation.errors.length > 0)
-      return false;
-  });
-};
-
 // Webpack dev server setup
 if (process.env.NODE_ENV !== 'production') {
   console.log('**** Using Webpack Dev Middleware');
@@ -52,7 +43,6 @@ if (process.env.NODE_ENV !== 'production') {
   const webpackConfig = require('../../../webpack.dev.config');
 
   webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-  // if (!test) webpackConfig.plugins.push(new NoLogOutputPlugin());
   const compiler = webpack(webpackConfig);
   app.use(webpackDevMiddleware(compiler, {
     ts: { ignoreDiagnostics: 'any[]' },
