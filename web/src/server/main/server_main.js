@@ -1,5 +1,5 @@
 // This server_main.js covers Production, Dev and Test
-// For mor information see the README.md in this directory
+// For mor information see the web/src/server/README.md
 
 const http = require('http');
 const https = require('https');
