@@ -13,14 +13,8 @@ module.exports = {
     './src/client/main.js',
   ],
   output: {
-    // path: `${__dirname}/../static_content/assets/`,
     path: '/../../static_content/assets/',
-    // path: '/src/server/static_content/assets/',
-    // path: dirname + '/assets/',
-    // path: '/',
-    // publicPath: '/../../static_content/assets/',
     publicPath: '/assets/',
-    // publicPath: `${__dirname}/../static_content/assets/`,
     filename: 'bundle.js',
   },
   resolve: {
