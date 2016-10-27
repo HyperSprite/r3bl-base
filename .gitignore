@@ -7,3 +7,6 @@ cert.pem
 
 # Logs
 ../npm-debug.log
+
+# VS Code
+vscode/
