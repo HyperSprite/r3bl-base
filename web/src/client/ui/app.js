@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {InputArea} from './inputarea';
 import {TodoList} from './todolist';
 import {Header} from './header';
@@ -27,7 +27,7 @@ import {
 import {
   Snackbar
 }
-  
+
   from 'material-ui';
 
 /**
@@ -93,35 +93,35 @@ const muiTheme = getMuiTheme(
 )
 
 class App extends Component {
-  
+
   constructor(props, context) {
     super(props, context);
-    
+
     // these keys control the state of the snackbar component
     this.state = {
       snackbar_open: false,
       snackbar_msg: "Default Message",
     }
   }
-  
+
   render() {
-    
+
     const {
       data,
       user,
       action_add_todo_text,
       action_toggle_todo_index
     } = this.props;
-    
+
     const todoArray = lodash.isNil(data) ? null : data.todoArray;
-    
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <div className="container">
-            
+
             <Header user={user}/>
-            
+
             <div className="content">
               <div className="side_container_in_content">
                 <div id="scroll_todolist" className="todolist_items">
@@ -144,27 +144,27 @@ class App extends Component {
                 </div>
               </div>
             </div>
-          
+
           </div>
-          
+
           <Snackbar
             message={this.state.snackbar_msg}
             open={this.state.snackbar_open}
             autoHideDuration={1000}
             onRequestClose={::this.handleRequestClose}
           />
-        
+
         </div>
-      
+
       </MuiThemeProvider>
     );
-    
+
   }
-  
+
   handleRequestClose() {
     this.showSnackBar(null);
   }
-  
+
   showSnackBar(msg) {
     if (lodash.isNil(msg)) {
       this.setState(
@@ -182,10 +182,10 @@ class App extends Component {
       );
     }
   }
-  
+
   /** before the component is loaded to the DOM */
   componentWillMount() {
-    
+
     // Listener for snackbar event
     this.le_showSnackbarListener = applicationContext.addListener(
       GLOBAL_CONSTANTS.LE_SHOW_SNACKBAR,
@@ -193,19 +193,19 @@ class App extends Component {
         this.showSnackBar(param);
       }
     );
-    
+
     // Socket stuff
     const socket = applicationContext.getSocket();
-    
+
     socket.on(
       "connect",
       ()=> {
         this.showSnackBar("socket.io is connected to server");
       }
     );
-    
+
   }
-  
+
   /** before component is removed from the DOM */
   componentWillUnmount() {
     // remove listeners
@@ -213,30 +213,30 @@ class App extends Component {
     // disconnect socket
     applicationContext.disconnectSocket();
   }
-  
+
   /** actually write the data to the socket and update the snackbar */
   sndMsgToServer(data) {
     applicationContext.emitToServer(GLOBAL_CONSTANTS.REMOTE_MESSAGE_FROM_CLIENT, data);
     this.showSnackBar(`send text to server: ${data}`);
   }
-  
+
   /** called by socket.io, when data is received from the server */
   rcvMsgFromServer(data) {
     this.showSnackBar(data);
   }
-  
+
   /** put app in the context, which will be passed down to the children */
   getChildContext() {
     return {
       app: this,
     };
   }
-  
+
   /** tell react that we have this object in the context ... note static keyword */
   static childContextTypes = {
     app: React.PropTypes.object.isRequired,
   }
-  
+
 }// end App
 
 export {App}
