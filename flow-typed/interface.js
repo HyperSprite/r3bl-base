@@ -66,3 +66,8 @@ export type ReduxStateIF = {
   user: UserIF,
   data: DataIF,
 }
+
+export type ApplicationContextIF = {
+  sessionId?: any;
+
+}
