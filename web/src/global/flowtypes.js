@@ -16,7 +16,7 @@ export type ChatMessageIF = {
   sessionId: string,
 }
 
-export type ChatMeassageListItemIF = {
+export type GCMeassageItemIF = {
   key: number,
   index: number,
   avatarIconSize: number,

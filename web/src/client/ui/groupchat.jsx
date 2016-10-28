@@ -3,8 +3,9 @@ import lodash from 'lodash';
 import { Paper, List } from 'material-ui';
 import { applicationContext } from '../container/context';
 import { GLOBAL_CONSTANTS } from '../../global/constants';
-import ChatMessageListItem from './groupchat-ChatMessageListItem';
+import GCMeassageItem from './groupchat-messageitem';
 
+const propTypes = {};
 
 export class GroupChat extends Component {
   constructor(props, context) {
@@ -84,7 +85,7 @@ export class GroupChat extends Component {
     let jsxElements = [];
     if (!lodash.isNil(chatMessageList)) {
       chatMessageList.forEach((chatMessage, index) => {
-        jsxElements.push(<ChatMessageListItem key={index} index={index} chatMessage={chatMessage}/>);
+        jsxElements.push(<GCMeassageItem key={index} index={index} chatMessage={chatMessage}/>);
       });
     }
     return (<List className="todolist">{jsxElements}</List>);
@@ -98,6 +99,4 @@ export class GroupChat extends Component {
   }
 }
 
-GroupChat.propTypes = {
-
-};
+GroupChat.propTypes = propTypes;

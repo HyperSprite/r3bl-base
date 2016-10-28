@@ -1,7 +1,7 @@
 // @flow
 import React, { PropTypes } from 'react';
 import { ListItem, Avatar } from 'material-ui';
-import type { ChatMeassageListItemIF } from '../../global/flowtypes';
+import type { GCMeassageItemIF } from '../../global/flowtypes';
 
 const propTypes = {
   chatMessage: PropTypes.object,
@@ -10,7 +10,7 @@ const propTypes = {
 };
 
 // class ChatMessageListItem extends React.Component<Props, {}> {
-export default function ChatMessageListItem(props: ChatMeassageListItemIF) {
+export default function GCMeassageItem(props: GCMeassageItemIF) {
   function displayMsg(chatMessage) {
     return `${chatMessage.displayName} says: ${chatMessage.message}`;
   }
@@ -23,4 +23,4 @@ export default function ChatMessageListItem(props: ChatMeassageListItemIF) {
   );
 }
 
-ChatMessageListItem.propTypes = propTypes;
+GCMeassageItem.propTypes = propTypes;
