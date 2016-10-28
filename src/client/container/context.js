@@ -42,10 +42,9 @@ class ApplicationContext {
     if (!lodash.isEqual(hostname, 'localhost')) {
       // prod app
       return true;
-    }
-    else {
-    // dev app
-    return false;
+    } else {
+      // dev app
+      return false;
     }
   }
   isDevelopment() {
