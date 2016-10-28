@@ -2,14 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import lodash from 'lodash';
 import {
   Paper,
-  Card,
-  CardActions,
-  CardHeader,
-  CardText,
-  FlatButton,
   List,
-  ListItem,
-  Avatar,
 } from 'material-ui';
 import GLOBAL_CONSTANTS from '../../global/constants';
 import { applicationContext } from '../container/context';
@@ -21,13 +14,11 @@ const propTypes = {
   chatMessage: PropTypes.object,
 };
 
-
 // export class GroupChat extends React.Component<Props, {}> {
 export default class GroupChat extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.displayMsg = this.displayMsg.bind(this);
     this.state = { chatMessageList: [] };
   }
 
@@ -92,14 +83,10 @@ export default class GroupChat extends Component {
 
   scrollToBottom() {
     setTimeout(() => {
-      const div = document.getElementById('scroll_chatlist');
-      div.scrollTop = div.scrollHeight - div.clientHeight;
-      div.animate({ scrollTop: div.scrollHeight });
+      this.div = document.getElementById('scroll_chatlist');
+      this.div.scrollTop = this.div.scrollHeight - this.div.clientHeight;
+      this.div.animate({ scrollTop: this.div.scrollHeight });
     });
-  }
-
-  displayMsg(chatMessage) {
-    return `${chatMessage.displayName} says: ${chatMessage.message}`;
   }
 
   // rcvMsgFromServer(data: ChatMessageIF) {
@@ -112,8 +99,6 @@ export default class GroupChat extends Component {
 
 // const chatMessage: ChatMessageIF = this.props.chatMessage;
   renderMessageList(chatMessageList) {
-
-
     if (!lodash.isNil(chatMessageList)) {
       return (
         <List className="todolist">
@@ -125,7 +110,6 @@ export default class GroupChat extends Component {
                   index={index}
                   chatMessage={chatMessage}
                   avatarIconSize="32"
-                  displayMsg={this.displayMsg(chatMessage)}
                 />
               )
             )

@@ -42,14 +42,14 @@ module.exports = {
           presets: ['es2015', 'stage-0', 'react'],
         },
       },
-      {
-        test: /\.tsx?$/,
-        loader: 'ts-loader',
-      },
-      {
-        test: /\.ts?$/,
-        loader: 'ts-loader',
-      },
+      // {
+      //   test: /\.tsx?$/,
+      //   loader: 'ts-loader',
+      // },
+      // {
+      //   test: /\.ts?$/,
+      //   loader: 'ts-loader',
+      // },
     ],
     preLoaders: [
       // All output '.js' files will have any sourcemaps re-processed by
