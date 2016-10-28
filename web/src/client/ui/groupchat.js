@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import lodash from 'lodash';
 import { Paper, List } from 'material-ui';
 import { applicationContext } from '../container/context';
@@ -6,7 +6,7 @@ import { GLOBAL_CONSTANTS } from '../../global/constants';
 import ChatMessageListItem from './groupchat-ChatMessageListItem';
 
 
-export class GroupChat extends React.Component {
+export class GroupChat extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = { chatMessageList: [] };
@@ -23,7 +23,7 @@ export class GroupChat extends React.Component {
       const msg = {
         message: `${presence.user.displayName} joined`,
         displayName: "The App",
-        photoURL: "https://todolist-redux-r3bl-alliance.herokuapp.com/favicon.png",
+        photoURL: "assets/favicon.png",
         timestamp: new Date().getTime(),
       };
       this.rcvMsgFromServer(msg);
@@ -32,7 +32,7 @@ export class GroupChat extends React.Component {
       const msg = {
         message: `${presence.user.displayName} left`,
         displayName: "The App",
-        photoURL: "https://todolist-redux-r3bl-alliance.herokuapp.com/favicon.png",
+        photoURL: "assets/favicon.png",
         timestamp: new Date().getTime(),
       };
       this.rcvMsgFromServer(msg);
@@ -41,7 +41,7 @@ export class GroupChat extends React.Component {
       const msg = {
         message: `${presence.user.displayName} is ${presence.status}`,
         displayName: "The App",
-        photoURL: "https://todolist-redux-r3bl-alliance.herokuapp.com/favicon.png",
+        photoURL: "assets/favicon.png",
         timestamp: new Date().getTime(),
       };
       this.rcvMsgFromServer(msg);
