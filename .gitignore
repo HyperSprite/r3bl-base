@@ -9,4 +9,4 @@ cert.pem
 ../npm-debug.log
 
 # VS Code
-vscode/
+.vscode/
