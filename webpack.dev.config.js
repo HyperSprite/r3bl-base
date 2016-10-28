@@ -23,8 +23,7 @@ module.exports = {
       '',
       '.webpack.js',
       '.web.js',
-      '.ts',
-      '.tsx',
+      '.jsx',
       '.js',
     ],
   },
@@ -34,11 +33,11 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel',
         query: {
-          plugins: ['transform-decorators-legacy', 'transform-runtime'],
+          plugins: ['transform-flow-strip-types', 'transform-decorators-legacy', 'transform-runtime'],
           presets: ['es2015', 'stage-0', 'react'],
         },
       },
