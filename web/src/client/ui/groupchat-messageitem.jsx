@@ -1,7 +1,6 @@
 // @flow
 import React, { PropTypes } from 'react';
 import { ListItem, Avatar } from 'material-ui';
-import type { GCMeassageItemIF } from '../../global/flowtypes';
 
 const propTypes = {
   chatMessage: PropTypes.object,

@@ -1,9 +1,8 @@
-// @flow
+// @flow weak
 import lodash from 'lodash';
 import events from 'events';
 import { createStore } from 'redux';
 
-import type { UserIF, DataIF, ReduxStateIF } from '../../global/flowtypes';
 import { GLOBAL_CONSTANTS, LOGGING_ENABLED } from '../../global/constants';
 import * as reducers from './reducers';
 import * as actions from './actions';
@@ -71,7 +70,7 @@ class ApplicationContext {
    * this sets up the socket object for use by this context
    */
   initSocket() {
-    let io = require('socket.io-client');
+    const io = require('socket.io-client');
     this.socket = new io.connect();
   }
   /**
