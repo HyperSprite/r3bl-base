@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
-import {InputArea} from './inputarea';
-import {TodoList} from './todolist';
-import {Header} from './header';
-import {GroupChat} from './groupchat';
+import { connect } from 'react-redux';
+import lodash from 'lodash';
 
-import {connect} from 'react-redux';
+import { GLOBAL_CONSTANTS } from '../../global/constants';
 import * as actions from '../container/actions';
-import {applicationContext, bindActionCreators} from '../container/context';
+import { applicationContext, bindActionCreators } from '../container/context';
 
-const GLOBAL_CONSTANTS = require('../../global/constants').GLOBAL_CONSTANTS;
-
-/**
- * utility function library import
- * more info - https://lodash.com/
- */
-const lodash = require('lodash');
+import { InputArea } from './inputarea';
+import { TodoList } from './todolist';
+import { Header } from './header';
+import { GroupChat } from './groupchat';
 
 /** Material UI stuff */
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -24,11 +19,7 @@ import {
   grey900,
   blueGrey200
 } from 'material-ui/styles/colors';
-import {
-  Snackbar
-}
-
-  from 'material-ui';
+import { Snackbar } from 'material-ui';
 
 /**
  * Material UI themes
