@@ -55,7 +55,7 @@ export default class GroupChat extends Component {
         const msg = {
           message: `${presence.user.displayName} left`,
           displayName: 'The App',
-          photoURL: 'favicon.png',
+          photoURL: 'assets/favicon.png',
           timestamp: new Date().getTime(),
         };
         this.rcvMsgFromServer(msg);
@@ -69,7 +69,7 @@ export default class GroupChat extends Component {
         const msg = {
           message: `${presence.user.displayName} is ${presence.status}`,
           displayName: 'The App',
-          photoURL: 'favicon.png',
+          photoURL: 'assets/favicon.png',
           timestamp: new Date().getTime(),
         };
         this.rcvMsgFromServer(msg);

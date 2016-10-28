@@ -10,7 +10,9 @@ const propTypes = {
 // class ChatMessageListItem extends React.Component<Props, {}> {
 export default function ChatMessageListItem(props) {
   function displayMsg(chatMessage) {
+    console.log('photo', chatMessage.photoURL);
     return `${chatMessage.displayName} says: ${chatMessage.message}`;
+
   }
 
   return (
