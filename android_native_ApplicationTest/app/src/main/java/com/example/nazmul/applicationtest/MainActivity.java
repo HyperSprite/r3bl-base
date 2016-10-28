@@ -58,6 +58,10 @@ public boolean onOptionsItemSelected(MenuItem item) {
   //noinspection SimplifiableIfStatement
   if (id == R.id.action_settings) {
     return true;
+  } else if (id == R.id.action_account) {
+    Toast.makeText(MainActivity.this, "todo login action", Toast.LENGTH_SHORT)
+         .show();
+    return true;
   }
 
   return super.onOptionsItemSelected(item);
