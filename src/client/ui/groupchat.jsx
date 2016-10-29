@@ -1,3 +1,5 @@
+// @flow
+// HyperSprite-TODO - More flow typing: 12 errors
 import React, { Component } from 'react';
 import lodash from 'lodash';
 import { Paper, List } from 'material-ui';

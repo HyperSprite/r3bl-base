@@ -10,7 +10,7 @@ module.exports = {
     // Add your application's scripts below
     'webpack/hot/dev-server',
     'webpack-hot-middleware/client',
-    './src/client/main.js',
+    './src/client/main.jsx',
   ],
   output: {
     path: '/../../static_content/assets/',

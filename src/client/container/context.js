@@ -1,4 +1,5 @@
 // @flow weak
+// HyperSprite-TODO - More flow typing: 19 errors on weak
 import lodash from 'lodash';
 import events from 'events';
 import { createStore } from 'redux';

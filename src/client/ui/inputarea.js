@@ -1,3 +1,5 @@
+// @flow
+// HyperSprite-TODO - More flow typing: 1 error
 const GLOBAL_CONSTANTS = require('../../global/constants').GLOBAL_CONSTANTS;
 import {applicationContext} from '../container/context'
 import React, {Component} from 'react';

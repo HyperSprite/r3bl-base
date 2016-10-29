@@ -23,7 +23,6 @@ export type GCMeassageItemIF = {
   chatMessage: ChatMessageIF,
 }
 
-
 /** this represents a user object */
 export type UserIF = {
   displayName: string;
@@ -69,5 +68,13 @@ export type ReduxStateIF = {
 
 export type ApplicationContextIF = {
   sessionId?: any;
-
 }
+
+// these are Action Creator Strings, see actions.js file
+export type ActionStrings = (
+  'SET_STATE_USER' |
+  'SET_STATE_DATA' |
+  'ADD_TODO' |
+  'TOGGLE_TODO' |
+  'REDUX_INIT'
+)
