@@ -1,7 +1,8 @@
+ // @flow
+ //
 /**
  * this is the main entry point for the web app
  */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';

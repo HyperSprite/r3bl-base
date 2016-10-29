@@ -1,4 +1,5 @@
-/// <reference path="../../../typings/globals/node/index.d.ts" />
+// @flow
+// HyperSprite-TODO - More flow typing: 1 error
 /**
  * these functions handle dealing presence state with firebase
  */

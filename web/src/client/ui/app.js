@@ -1,3 +1,5 @@
+// @flow
+// HyperSprite-TODO - More flow typing: 1 error
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import lodash from 'lodash';

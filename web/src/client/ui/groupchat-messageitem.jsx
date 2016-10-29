@@ -1,4 +1,5 @@
 // @flow
+//
 import React, { PropTypes } from 'react';
 import { ListItem, Avatar } from 'material-ui';
 

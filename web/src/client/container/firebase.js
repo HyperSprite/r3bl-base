@@ -1,4 +1,5 @@
-/// <reference path="../../../typings/globals/node/index.d.ts" />
+// @flow
+// HyperSprite-TODO - More flow typing: 9 errors
 /**
  * these functions handle dealing with firebase for loading and saving data from it
  */

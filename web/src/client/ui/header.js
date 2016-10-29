@@ -1,3 +1,5 @@
+// @flow
+// HyperSprite-TODO - More flow typing: 1 error
 /**
  * Created by nazmul on 9/2/16.
  */
@@ -30,23 +32,23 @@ import ActionAccountCircle from "material-ui/svg-icons/action/account-circle";
  * Context that is requires: app
  */
 class Header extends Component {
-  
+
   constructor(props, context) {
     super(props, context);
   }
-  
+
   render() {
-    
+
     const {user} = this.props;
-    
+
     // depending on whether the user is signed in or not, provide different appbar
     let titleString = `Todo List Sample App`;
-    
+
     const avatar_icon_size = 32;
     const custom_padding = {
       padding: 8,
     };
-    
+
     // depending on whether the user is signed in or not, provide different appbar
     let appbar_code = "";
     if (applicationContext.isUserSet() && !applicationContext.getUser().isAnonymous) {
@@ -73,16 +75,16 @@ class Header extends Component {
                   </IconButton>}
         />;
     }
-    
+
     return appbar_code;
-    
+
   }// end render()
-  
+
   loginAction() {
-    
+
     // get the App object from the React context
     const app = this.context.app;
-    
+
     if (applicationContext.isUserSet()) {
       if (applicationContext.getUser().isAnonymous) {
         // go from anonauth->signedinauth
@@ -98,14 +100,14 @@ class Header extends Component {
       // do nothing .. user must be set!
       app.showSnackBar("should never happen -> user must be set");
     }
-    
+
   }
-  
+
   /** tell react that we have this object in the context ... note static keyword */
   static contextTypes = {
     app: React.PropTypes.object.isRequired,
   }
-  
+
 }// end class Header
 
 export {Header}

@@ -1,3 +1,5 @@
+ // @flow
+ // HyperSprite-TODO - More flow typing: 1 error
 import React, {Component} from 'react';
 const GLOBAL_CONSTANTS = require('../../global/constants').GLOBAL_CONSTANTS;
 import {applicationContext} from '../container/context';
@@ -18,19 +20,19 @@ import CheckBoxOutlineBlank from "material-ui/svg-icons/toggle/check-box-outline
  * State that it manages: n/a
  */
 class TodoList extends Component {
-  
+
   constructor(props, context) {
     super(props, context);
   }
-  
+
   componentDidMount() {
     this.scrollToBottom();
   }
-  
+
   componentDidUpdate() {
     this.scrollToBottom();
   }
-  
+
   scrollToBottom() {
     setTimeout(
       () => {
@@ -40,16 +42,16 @@ class TodoList extends Component {
       }, 0
     );
   }
-  
+
   render() {
-    
+
     const {
       todoArray,
       action_toggle_todo_index,
     } = this.props;
-    
+
     let jsxElements = [];
-    
+
     if (!lodash.isNil(todoArray)) {
       todoArray.forEach(
         (todoItem, index)=> {
@@ -64,13 +66,13 @@ class TodoList extends Component {
         }
       );
     }
-    
+
     return (
       <List className="todolist">{jsxElements}</List>
     );
-    
+
   }
-  
+
 }
 
 /**
@@ -80,13 +82,13 @@ class TodoList extends Component {
  * State that it manages: n/a
  */
 class TodoListItem extends Component {
-  
+
   render() {
-    
+
     const todoItem = this.props.todoItem;
     const done = todoItem.done;
     const text = todoItem.item;
-    
+
     if (done) {
       return (
         <ListItem
@@ -104,9 +106,9 @@ class TodoListItem extends Component {
         />
       );
     }
-    
+
   }
-  
+
   onClick(e) {
     let {
       index,
@@ -114,7 +116,7 @@ class TodoListItem extends Component {
     } = this.props;
     action_toggle_todo_index(index);
   }
-  
+
 }
 
 export {TodoList}
