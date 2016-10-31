@@ -10,7 +10,7 @@ const propTypes = {
 };
 
 // class ChatMessageListItem extends React.Component<Props, {}> {
-export default function GCMeassageItem(props: GCMeassageItemIF) {
+export default function GCMessageItem(props: GCMessageItemIF) {
   function displayMsg(chatMessage) {
     return `${chatMessage.displayName} says: ${chatMessage.message}`;
   }
@@ -18,9 +18,13 @@ export default function GCMeassageItem(props: GCMeassageItemIF) {
   return (
     <ListItem
       primaryText={displayMsg(props.chatMessage)}
-      rightIcon={<Avatar size={props.avatarIconSize} src={props.chatMessage.photoURL} />}
+      rightIcon={
+        <Avatar
+          size={props.avatarIconSize}
+          src={props.chatMessage.photoURL}
+        />}
     />
   );
 }
 
-GCMeassageItem.propTypes = propTypes;
+GCMessageItem.propTypes = propTypes;
