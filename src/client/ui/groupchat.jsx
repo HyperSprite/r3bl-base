@@ -9,7 +9,7 @@ import GCMessageItem from './groupchat-messageitem';
 
 const propTypes = {};
 
-export class GroupChat extends Component {
+export default class GroupChat extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = { chatMessageList: [] };
@@ -25,8 +25,8 @@ export class GroupChat extends Component {
     applicationContext.addListener(GLOBAL_CONSTANTS.LE_PRESENCE_USER_ADDED, (presence) => {
       const msg = {
         message: `${presence.user.displayName} joined`,
-        displayName: "The App",
-        photoURL: "assets/favicon.png",
+        displayName: 'The App',
+        photoURL: 'assets/favicon.png',
         timestamp: new Date().getTime(),
       };
       this.rcvMsgFromServer(msg);
@@ -34,8 +34,8 @@ export class GroupChat extends Component {
     applicationContext.addListener(GLOBAL_CONSTANTS.LE_PRESENCE_USER_REMOVED, (presence) => {
       const msg = {
         message: `${presence.user.displayName} left`,
-        displayName: "The App",
-        photoURL: "assets/favicon.png",
+        displayName: 'The App',
+        photoURL: 'assets/favicon.png',
         timestamp: new Date().getTime(),
       };
       this.rcvMsgFromServer(msg);
@@ -43,8 +43,8 @@ export class GroupChat extends Component {
     applicationContext.addListener(GLOBAL_CONSTANTS.LE_PRESENCE_USER_CHANGED, (presence) => {
       const msg = {
         message: `${presence.user.displayName} is ${presence.status}`,
-        displayName: "The App",
-        photoURL: "assets/favicon.png",
+        displayName: 'The App',
+        photoURL: 'assets/favicon.png',
         timestamp: new Date().getTime(),
       };
       this.rcvMsgFromServer(msg);
@@ -55,7 +55,7 @@ export class GroupChat extends Component {
   }
   scrollToBottom() {
     setTimeout(() => {
-      let div = document.getElementById('scroll_chatlist');
+      const div = document.getElementById('scroll_chatlist');
       div.scrollTop = div.scrollHeight - div.clientHeight;
       div.animate({ scrollTop: div.scrollHeight });
     }, 0);
@@ -87,7 +87,7 @@ export class GroupChat extends Component {
     let jsxElements = [];
     if (!lodash.isNil(chatMessageList)) {
       chatMessageList.forEach((chatMessage, index) => {
-        jsxElements.push(<GCMessageItem key={index} index={index} chatMessage={chatMessage}/>);
+        jsxElements.push(<GCMessageItem key={index} index={index} chatMessage={chatMessage} />);
       });
     }
     return (<List className="todolist">{jsxElements}</List>);
