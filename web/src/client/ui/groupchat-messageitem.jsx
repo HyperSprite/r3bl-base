@@ -9,7 +9,6 @@ const propTypes = {
   photoURL: PropTypes.string,
 };
 
-// class ChatMessageListItem extends React.Component<Props, {}> {
 export default function GCMessageItem(props: GCMessageItemIF) {
   function displayMsg(chatMessage) {
     return `${chatMessage.displayName} says: ${chatMessage.message}`;
