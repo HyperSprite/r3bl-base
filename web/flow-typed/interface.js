@@ -10,13 +10,13 @@ export type ReduxActionIF = {
 
 export type ChatMessageIF = {
   message: string,
-  timestamp: number,
   displayName: string,
+  timestamp: number,
   photoURL: string,
   sessionId: string,
 }
 
-export type GCMeassageItemIF = {
+export type GCMessageItemIF = {
   key: number,
   index: number,
   avatarIconSize: number,
