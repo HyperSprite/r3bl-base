@@ -7,8 +7,8 @@ import { createStore } from 'redux';
 import { GLOBAL_CONSTANTS, LOGGING_ENABLED } from '../../global/constants';
 import * as reducers from './reducers';
 import * as actions from './actions';
-import * as persistence from './firebase';
-import * as presence from './presence';
+import persistence from './firebase';
+import presence from './presence';
 
 /**
  * this holds the app's state which is comprised of:
@@ -35,7 +35,7 @@ class ApplicationContext {
     // setup firebase auth
     persistence.initAuth(this);
     // setup firebase presence
-    presence.initPresence(this);
+    presence(this);
   }
   isProduction() {
     const hostname = window.location.hostname;
@@ -224,7 +224,7 @@ class ApplicationContext {
       this.reduxStore = createStore(reducers.reducer_main, null);
     }
     // explicitly INIT Redux!
-    this.reduxStore.dispatch(actions.action_init());
+    this.reduxStore.dispatch(actions.actionInit());
     /**
      * this enables the use of redux dev tools in Chrome if you have the
      * Chrome extension installed - https://goo.gl/xU4D6P
