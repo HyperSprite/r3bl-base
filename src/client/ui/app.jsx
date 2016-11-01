@@ -1,27 +1,26 @@
 // @flow
-// HyperSprite-TODO - More flow typing: 1 error
-import React, { Component } from 'react';
+// HyperSprite-TODO - More flow typing: 15 errors
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import lodash from 'lodash';
-
-import { GLOBAL_CONSTANTS } from '../../global/constants';
-import * as actions from '../container/actions';
-import { applicationContext, bindActionCreators } from '../container/context';
-
-import { InputArea } from './inputarea';
-import { TodoList } from './todolist';
-import { Header } from './header';
-import { GroupChat } from './groupchat';
-
 /** Material UI stuff */
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {
   lightBlue50,
   grey900,
-  blueGrey200
+  blueGrey200,
 } from 'material-ui/styles/colors';
 import { Snackbar } from 'material-ui';
+
+import { GLOBAL_CONSTANTS } from '../../global/constants';
+import * as actions from '../container/actions';
+import { applicationContext, bindActionCreators } from '../container/context';
+
+import InputArea from './inputarea';
+import TodoList from './todolist';
+import Header from './header';
+import GroupChat from './groupchat';
 
 /**
  * Material UI themes
@@ -85,7 +84,7 @@ const muiTheme = getMuiTheme(
   (dispatch) => bindActionCreators(actions, dispatch, applicationContext)
 )
 
-class App extends Component {
+export default class App extends Component {
 
   constructor(props, context) {
     super(props, context);
@@ -102,8 +101,8 @@ class App extends Component {
     const {
       data,
       user,
-      action_add_todo_text,
-      action_toggle_todo_index
+      actionAddTodoText,
+      actionToggleTodoIndex
     } = this.props;
 
     const todoArray = lodash.isNil(data) ? null : data.todoArray;
@@ -119,12 +118,12 @@ class App extends Component {
               <div className="side_container_in_content">
                 <div id="scroll_todolist" className="todolist_items">
                   <TodoList todoArray={todoArray}
-                            action_toggle_todo_index={action_toggle_todo_index}/>
+                            actionToggleTodoIndex={actionToggleTodoIndex}/>
                 </div>
                 <div className="todo_input_area">
                   <InputArea type="todo"
                              user={user}
-                             action_add_todo_text={action_add_todo_text}/>
+                             actionAddTodoText={actionAddTodoText}/>
                 </div>
               </div>
               <div className="groupchat_container_in_content">
@@ -232,4 +231,3 @@ class App extends Component {
 
 }// end App
 
-export {App}

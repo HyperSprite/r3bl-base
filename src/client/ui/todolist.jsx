@@ -1,6 +1,6 @@
  // @flow
  // HyperSprite-TODO - More flow typing: 1 error
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 const GLOBAL_CONSTANTS = require('../../global/constants').GLOBAL_CONSTANTS;
 import {applicationContext} from '../container/context';
 const lodash = require('lodash');
@@ -19,7 +19,7 @@ import CheckBoxOutlineBlank from "material-ui/svg-icons/toggle/check-box-outline
  * Props that are passed to it: n/a
  * State that it manages: n/a
  */
-class TodoList extends Component {
+export default class TodoList extends Component {
 
   constructor(props, context) {
     super(props, context);
@@ -47,7 +47,7 @@ class TodoList extends Component {
 
     const {
       todoArray,
-      action_toggle_todo_index,
+      actionToggleTodoIndex,
     } = this.props;
 
     let jsxElements = [];
@@ -60,7 +60,7 @@ class TodoList extends Component {
               key={index}
               index={index}
               todoItem={todoItem}
-              action_toggle_todo_index={action_toggle_todo_index}
+              actionToggleTodoIndex={actionToggleTodoIndex}
             />
           );
         }
@@ -112,11 +112,11 @@ class TodoListItem extends Component {
   onClick(e) {
     let {
       index,
-      action_toggle_todo_index
+      actionToggleTodoIndex
     } = this.props;
-    action_toggle_todo_index(index);
+    actionToggleTodoIndex(index);
   }
 
 }
 
-export {TodoList}
+// export {TodoList}

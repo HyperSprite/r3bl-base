@@ -11,31 +11,31 @@ const TYPES: {[key: ActionStrings]: ActionStrings} = {
   REDUX_INIT: 'REDUX_INIT',
 };
 
-function action_init() {
+function actionInit() {
   return {
     type: TYPES.REDUX_INIT,
     payload: null,
   };
 }
-function action_set_state_user(user: UserIF) {
+function actionSetStateUser(user: UserIF) {
   return {
     type: TYPES.SET_STATE_USER,
     payload: user,
   };
 }
-function action_set_state_data(data: DataIF) {
+function actionSetStateData(data: DataIF) {
   return {
     type: TYPES.SET_STATE_DATA,
     payload: data,
   };
 }
-function action_add_todo_text(text: string) {
+function actionAddTodoText(text: string) {
   return {
     type: TYPES.ADD_TODO,
     payload: text,
   };
 }
-function action_toggle_todo_index(index: number) {
+function actionToggleTodoIndex(index: number) {
   return {
     type: TYPES.TOGGLE_TODO,
     payload: index,
@@ -43,9 +43,9 @@ function action_toggle_todo_index(index: number) {
 }
 export {
   TYPES,
-  action_set_state_data,
-  action_set_state_user,
-  action_toggle_todo_index,
-  action_add_todo_text,
-  action_init
+  actionSetStateData,
+  actionSetStateUser,
+  actionToggleTodoIndex,
+  actionAddTodoText,
+  actionInit,
 };
