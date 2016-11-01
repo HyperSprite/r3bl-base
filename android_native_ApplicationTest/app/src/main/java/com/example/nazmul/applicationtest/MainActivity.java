@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import me.relex.circleindicator.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,9 +40,11 @@ protected void onCreate(Bundle savedInstanceState) {
               .show());
 
   // view pager setup
-  ViewPager viewp = (ViewPager) findViewById(R.id.viewPager);
+  ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
   ViewPagerAdapter myPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-  viewp.setAdapter(myPagerAdapter);
+  viewPager.setAdapter(myPagerAdapter);
+  CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
+  indicator.setViewPager(viewPager);
 
 }
 
