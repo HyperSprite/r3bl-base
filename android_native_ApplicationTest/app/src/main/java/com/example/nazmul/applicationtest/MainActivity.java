@@ -3,6 +3,7 @@ package com.example.nazmul.applicationtest;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,9 +19,12 @@ private static final String TAG = MainActivity.class.getSimpleName();
 protected void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
   setContentView(R.layout.activity_main);
+
+  // toolbar setup
   Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
   setSupportActionBar(toolbar);
 
+  // fab setup
   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
   fab.setOnClickListener(
     view ->
@@ -33,6 +37,12 @@ protected void onCreate(Bundle savedInstanceState) {
                                 .show();
                          })
               .show());
+
+  // view pager setup
+  ViewPager viewp = (ViewPager) findViewById(R.id.viewPager);
+  ViewPagerAdapter myPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+  viewp.setAdapter(myPagerAdapter);
+
 }
 
 @Override
@@ -66,4 +76,5 @@ public boolean onOptionsItemSelected(MenuItem item) {
 
   return super.onOptionsItemSelected(item);
 }
+
 }
