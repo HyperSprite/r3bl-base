@@ -42,10 +42,10 @@ export type PresenceIF = {
 
 /** holds information about the user who is signed in */
 export type AuthStateIF = {
-  old_uid?: string;
-  new_uid?: string;
-  new_user?: UserIF;
-  old_user?: UserIF;
+  oldUid?: string;
+  newUid?: string;
+  newUser?: UserIF;
+  oldUser?: UserIF;
 }
 
 /** this represents a constituent element of the todoArray */

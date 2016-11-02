@@ -1,5 +1,6 @@
 // @flow
-// HyperSprite-TODO - More flow typing: 9 errors
+// HyperSprite-TODO - More flow typing: 17 errors
+/* eslint no-console: */ // --> OFF
 /**
  * these functions handle dealing with firebase for loading and saving data from it
  */
@@ -16,9 +17,9 @@ const DB_CONST = {
 };
 
 /** holds information about the user (anonymous or signed-in) */
-let authStateObject = {};
+let authStateObject: AuthStateIF = {};
 /** holds firebase listener that has on('value') registered */
-let firebaseOnListener = null;
+let firebaseOnListener: any = null;
 /**
  * gets a firebase reference that points to the node where the user's data is stored
  * @param ctx
@@ -32,7 +33,8 @@ function getUserDataRootRef(ctx, id) {
       .ref(DB_CONST.USER_DATA_ROOT);
   }
   return ctx.getDatabase()
-    .ref(`${DB_CONST.USER_DATA_ROOT}/${id}`);
+  // Do not use template string below for this
+    .ref(DB_CONST.USER_DATA_ROOT + '/' + id);
 }
 
 /**
@@ -58,7 +60,7 @@ function processUpdateFromFirebase(snap, ctx) {
     // nothing to do!
     return;
   }
-  const data = value[DB_CONST.DATA_KEY];
+  const data: DataIF = value[DB_CONST.DATA_KEY];
   const payloadSessionId = data[DB_CONST.SESSION_ID];
   const timestamp = data[DB_CONST.TIMESTAMP];
   if (!lodash.isNil(payloadSessionId)) {
@@ -105,7 +107,7 @@ function loadDataForUserAndAttachListenerToFirebase(ctx) {
 function saveUserAccountDataAndSetUser(ctx, user) {
   // note that the timestamp is NOT set on this object ... it will only be set by
   // firebase on the server side when this is set() on the ref
-  const userObject = {
+  const userObject: UserIF = {
     displayName: user.displayName,
     photoURL: user.photoURL,
     isAnonymous: user.isAnonymous,
@@ -258,7 +260,7 @@ persistence.initAuth = (ctx) => {
 };
 
 /**
- * this is called when the user initiates Google signin. this is just called just once,
+ * this is called when the user initiates Google signin. this is called just once,
  * while the user is signed out or is an anonymous user (and the UI action is called).
  * subsequently this does not get called. the user is already auth'd ... it's handled
  * via the regular callback (onAuthStateChanged).
@@ -321,14 +323,14 @@ persistence.forceSignOut = (ctx) => {
 };
 
 
-persistence.dispatchActionAndSaveStateToFirebase = (origAction, ctx) => {
+persistence.dispatchActionAndSaveStateToFirebase = (origAction: ReduxActionIF, ctx) => {
   const action = origAction;
   // apply the action locally, and this will change the state
   ctx.getReduxStore()
       .dispatch(action);
   // save to persistence
-  let rootRef = getUserDataRootRef(ctx, ctx.getUserId());
-  let value = ctx.getReduxState().data;
+  const rootRef = getUserDataRootRef(ctx, ctx.getUserId());
+  const value = ctx.getReduxState().data;
   value[DB_CONST.SESSION_ID] = ctx.getSessionId();
   value[DB_CONST.TIMESTAMP] = ctx.getFirebaseServerTimestampObject();
   rootRef.child(DB_CONST.DATA_KEY)

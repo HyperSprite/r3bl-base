@@ -41,13 +41,9 @@ if (process.env.NODE_ENV !== 'production') {
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
   const webpackConfig = require('../../../webpack.dev.config');
-
-  webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
   const compiler = webpack(webpackConfig);
   app.use(webpackDevMiddleware(compiler, {
-    ts: { ignoreDiagnostics: 'any[]' },
     publicPath: webpackConfig.output.publicPath,
-    stats: { chunks: test },
   }));
   app.use(webpackHotMiddleware(compiler));
 }
