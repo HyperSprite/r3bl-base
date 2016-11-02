@@ -1,16 +1,13 @@
  // @flow
  // HyperSprite-TODO - More flow typing: 1 error
 import React, { Component } from 'react';
-const GLOBAL_CONSTANTS = require('../../global/constants').GLOBAL_CONSTANTS;
-import {applicationContext} from '../container/context';
-const lodash = require('lodash');
-import {
-  List, ListItem
-}
-  from 'material-ui';
-import CheckBox from "material-ui/svg-icons/toggle/check-box";
-import CheckBoxOutlineBlank from "material-ui/svg-icons/toggle/check-box-outline-blank";
+import lodash from 'lodash';
+import { List, ListItem } from 'material-ui';
+import CheckBox from 'material-ui/svg-icons/toggle/check-box';
+import CheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
 
+import { GLOBAL_CONSTANTS } from '../../global/constants';
+import { applicationContext } from '../container/context';
 /**
  * this renders the list of todoItems using the data in the LE_SET_DATA event.
  *

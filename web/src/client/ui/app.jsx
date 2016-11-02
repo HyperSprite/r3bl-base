@@ -74,12 +74,12 @@ const muiTheme = getMuiTheme(
       return {
         data: null,
         user: null,
-      }
+      };
     } else
       return {
         data: state.data,
-        user: state.user
-      }
+        user: state.user,
+      };
   },
   (dispatch) => bindActionCreators(actions, dispatch, applicationContext)
 )

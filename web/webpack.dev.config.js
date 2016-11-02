@@ -8,7 +8,6 @@ module.exports = {
     // Set up an ES6-ish environment
     'babel-polyfill',
     // Add your application's scripts below
-    'webpack/hot/dev-server',
     'webpack-hot-middleware/client',
     './src/client/main.jsx',
   ],
@@ -28,27 +27,15 @@ module.exports = {
     ],
   },
   plugins: [
-
+    new webpack.HotModuleReplacementPlugin(),
   ],
   module: {
     loaders: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loader: 'babel',
-        query: {
-          plugins: ['transform-flow-strip-types', 'transform-decorators-legacy', 'transform-runtime'],
-          presets: ['es2015', 'stage-0', 'react'],
-        },
+        loaders: ['react-hot', 'babel'],
       },
-      // {
-      //   test: /\.tsx?$/,
-      //   loader: 'ts-loader',
-      // },
-      // {
-      //   test: /\.ts?$/,
-      //   loader: 'ts-loader',
-      // },
     ],
     preLoaders: [
       // All output '.js' files will have any sourcemaps re-processed by

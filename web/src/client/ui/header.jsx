@@ -61,7 +61,7 @@ export default class Header extends Component {
     const { user } = this.props;
 
     // depending on whether the user is signed in or not, provide different appbar
-    let titleString = `Todo List Sample App`;
+    let titleString = 'Todo List Sample App';
 
     const avatarIconSize = 32;
     const customPadding = {

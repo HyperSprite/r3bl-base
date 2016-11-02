@@ -7,13 +7,11 @@ import { TextField } from 'material-ui';
 import { GLOBAL_CONSTANTS } from '../../global/constants';
 import { applicationContext } from '../container/context';
 
-// const propTypes = {
-//   props: PropTypes.object,
-//   context: PropTypes.object,
-//   user: PropTypes.object,
-//   type: PropTypes.object,
-//   actionAddTodoText: PropTypes.func,
-// };
+const propTypes = {
+  user: PropTypes.object,
+  type: PropTypes.string,
+  actionAddTodoText: PropTypes.func,
+};
 
 /**
  * this is a simple component that allows the user to type a new todoitem (and emits
@@ -39,7 +37,7 @@ export default class InputArea extends Component {
     app: React.PropTypes.object.isRequired,
   }
 
-  constructor(props, context) {
+  constructor(props: {}, context: any) {
     super(props, context);
     this.state = { inputValue: '' };
 
@@ -100,11 +98,14 @@ export default class InputArea extends Component {
     const labeltextChat = 'Write a group chat message';
     const labeltextCantChat = 'Must sign in to chat';
     let labeltext;
+    let textFieldDisabled = false;
 
     if (lodash.isEqual(type, 'todo')) {
       labeltext = labeltextTodo;
+      textFieldDisabled = false;
     } else {
       labeltext = labeltextCantChat;
+      textFieldDisabled = true;
     }
 
     if (!lodash.isNil(user)) {
@@ -112,8 +113,10 @@ export default class InputArea extends Component {
         // user is signed in && not anonymous
         if (lodash.isEqual(type, 'todo')) {
           labeltext = `${labeltextTodo} ${user.displayName}`;
+          textFieldDisabled = false;
         } else {
           labeltext = `${labeltextChat} ${user.displayName}`;
+          textFieldDisabled = false;
         }
       }
     }
@@ -129,6 +132,7 @@ export default class InputArea extends Component {
         style={style}
         hintText={labeltext}
         value={this.state.inputValue}
+        disabled={textFieldDisabled}
         onChange={this.onChange}
         onKeyPress={this.onKeyPress}
         fullWidth
@@ -140,4 +144,4 @@ export default class InputArea extends Component {
 
 // export default InputArea;
 
-// InputArea.propTypes = propTypes;
+InputArea.propTypes = propTypes;

@@ -84,9 +84,15 @@ Use double-quotes ```" "``` for surrounding strings.
 
 ###Other Notes:
 **Props default to true**:
-If you have a prop, like ```fullWidth={true}```, you can omit the ```={true}``` and just type ```fullWidth```. This can look a little odd at first but it does save a bit of typing.
+If you have a prop, like ```fullWidth={true}``` that is always *true*, you can omit the ```={true}``` and just type ```fullWidth```. This can look a little odd at first but it does save a bit of typing.
+
+**Switching Boolean Element Props such as Required and Disabled**
+  If you want to change prop, create a variable and use it to control your prop.
+  For instance if we had ```let textFieldDisabled = false;``` and added the prop ```disabled={textFieldDisabled}``` to our input element. If you looked at the rendered html, *disabled* would not appear as one of the attributes of the element. If we then change ```textFieldDisabled = true;``` and look at our element, it would now show *disabled*. 
 
 **Don't bind ```this``` inside of JSX**
 Binding ```this``` inside of JSX will cause a new binding every time that component is called. This may not be an issue when you only have a few components but imagine calling hundreds of list items, and binding all of them, this can cause a performance issues. Instead, bind these in the constructor like so:
 ```this.onKeyPress = this.onKeyPress.bind(this);```
 Yes it seems redundant, and there are some proposals for fixing this in future versions of React but until then, this works well and seems quite clear.
+
+Here is a guideline for the [component method order.](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/sort-comp.md)
