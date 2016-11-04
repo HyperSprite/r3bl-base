@@ -1,5 +1,5 @@
 // @flow
-// HyperSprite-TODO - More flow typing: 2, missing state and action
+// HyperSprite-TODO - More flow typing: 1 error
 import lodash from 'lodash';
 import * as actions from './actions';
 import { applicationContext } from './context';
@@ -13,37 +13,41 @@ const initialState = {
   user: null,
   data: null,
 };
-function add_todo(state, action) {
-  const todo_text = action.payload;
-  if (!lodash.isNil(todo_text)) {
-    let data_copy = lodash.cloneDeep(state.data);
-    let todoObject = {
-      item: todo_text,
+
+// We've declared the types for state and action in the main reducer
+// So Flow knows the types for all of the states and actions below.
+
+function addTodo(state, action) {
+  const todoText = action.payload;
+  if (!lodash.isNil(todoText)) {
+    let dataCopy = lodash.cloneDeep(state.data);
+    const todoObject = {
+      item: todoText,
       done: false,
     };
-    if (lodash.isNil(data_copy)) {
-      data_copy = { todoArray: [todoObject] };
+    if (lodash.isNil(dataCopy)) {
+      dataCopy = { todoArray: [todoObject] };
     } else {
-      data_copy.todoArray.push(todoObject);
+      dataCopy.todoArray.push(todoObject);
     }
     const retval = {
       user: state.user,
-      data: data_copy,
+      data: dataCopy,
     };
     return retval;
-  } else {
-    return state;
   }
+  return state;
 }
-function toggle_todo(state, action) {
+
+function toggleTodo(state, action) {
   try {
     const index = action.payload;
-    let data_copy = lodash.cloneDeep(applicationContext.getData());
-    let todoObject = data_copy.todoArray[index];
+    const dataCopy = lodash.cloneDeep(applicationContext.getData());
+    const todoObject = dataCopy.todoArray[index];
     todoObject.done = !todoObject.done;
     const retval = {
       user: state.user,
-      data: data_copy,
+      data: dataCopy,
     };
     return retval;
   } catch (e) {
@@ -52,33 +56,38 @@ function toggle_todo(state, action) {
   }
   return state;
 }
-function set_data(state, action) {
+
+function setData(state, action) {
   const retval = {
     data: action.payload,
     user: state.user,
   };
   return retval;
 }
-function set_user(state, action) {
+
+function setUser(state, action) {
   const retval = {
     data: state.data,
     user: action.payload,
   };
   return retval;
 }
-function reducer_main(state, action) {
+
+function reducerMain(state: ReduxStateIF, action: ReduxActionIF): ReduxStateIF {
   switch (action.type) {
     case actions.TYPES.REDUX_INIT:
       return initialState;
     case actions.TYPES.ADD_TODO:
-      return add_todo(state, action);
+      return addTodo(state, action);
     case actions.TYPES.TOGGLE_TODO:
-      return toggle_todo(state, action);
+      return toggleTodo(state, action);
     case actions.TYPES.SET_STATE_DATA:
-      return set_data(state, action);
+      return setData(state, action);
     case actions.TYPES.SET_STATE_USER:
-      return set_user(state, action);
+      return setUser(state, action);
+    default:
+      return state;
   }
 }
 
-export { reducer_main, initialState };
+export { reducerMain, initialState };

@@ -1,7 +1,7 @@
 // @flow
 //
 // List of all Flow types used in the container and ui package.
-// These only apply to the files with '// flow' at the top.
+// These only apply to the files with '// @flow' at the top.
 
 export type ReduxActionIF = {
   type: string,
@@ -13,14 +13,21 @@ export type ChatMessageIF = {
   displayName: string,
   timestamp: number,
   photoURL: string,
-  sessionId: string,
+  sessionId?: string,
 }
 
 export type GCMessageItemIF = {
-  key: number,
-  index: number,
   avatarIconSize: number,
   chatMessage: ChatMessageIF,
+}
+
+export type GCMessageStyleIF = {
+  height: string,
+  width: string,
+  margin: number,
+  padding: number,
+  textAlign: string,
+  display: string,
 }
 
 /** this represents a user object */
@@ -62,8 +69,8 @@ export type DataIF = {
 }
 
 export type ReduxStateIF = {
-  user: UserIF,
-  data: DataIF,
+  user: UserIF | null,
+  data: DataIF | null,
 }
 
 export type ApplicationContextIF = {
