@@ -52,6 +52,13 @@ const muiTheme = getMuiTheme(
   }
 );
 
+const propTypes = {
+  data: PropTypes.object,
+  user: PropTypes.object,
+  actionAddTodoText: PropTypes.object,
+  actionToggleTodoIndex: PropTypes.object,
+};
+
 /**
  * this class contains the UI components for the entire single page app
  *
@@ -75,13 +82,13 @@ const muiTheme = getMuiTheme(
         data: null,
         user: null,
       };
-    } else
-      return {
-        data: state.data,
-        user: state.user,
-      };
+    }
+    return {
+      data: state.data,
+      user: state.user,
+    };
   },
-  (dispatch) => bindActionCreators(actions, dispatch, applicationContext)
+  dispatch => bindActionCreators(actions, dispatch, applicationContext)
 )
 
 export default class App extends Component {
@@ -93,16 +100,15 @@ export default class App extends Component {
     this.state = {
       snackbar_open: false,
       snackbar_msg: "Default Message",
-    }
+    };
   }
 
   render() {
-
     const {
       data,
       user,
       actionAddTodoText,
-      actionToggleTodoIndex
+      actionToggleTodoIndex,
     } = this.props;
 
     const todoArray = lodash.isNil(data) ? null : data.todoArray;
@@ -112,18 +118,22 @@ export default class App extends Component {
         <div>
           <div className="container">
 
-            <Header user={user}/>
+            <Header user={user} />
 
             <div className="content">
               <div className="side_container_in_content">
                 <div id="scroll_todolist" className="todolist_items">
-                  <TodoList todoArray={todoArray}
-                            actionToggleTodoIndex={actionToggleTodoIndex}/>
+                  <TodoList
+                    todoArray={todoArray}
+                    actionToggleTodoIndex={actionToggleTodoIndex}
+                  />
                 </div>
                 <div className="todo_input_area">
-                  <InputArea type="todo"
-                             user={user}
-                             actionAddTodoText={actionAddTodoText}/>
+                  <InputArea
+                    type="todo"
+                    user={user}
+                    actionAddTodoText={actionAddTodoText}
+                  />
                 </div>
               </div>
               <div className="groupchat_container_in_content">
@@ -131,12 +141,13 @@ export default class App extends Component {
                   <GroupChat />
                 </div>
                 <div className="chat_input_area">
-                  <InputArea type="chat"
-                             user={user}/>
+                  <InputArea
+                    type="chat"
+                    user={user}
+                  />
                 </div>
               </div>
             </div>
-
           </div>
 
           <Snackbar
@@ -145,12 +156,9 @@ export default class App extends Component {
             autoHideDuration={1000}
             onRequestClose={::this.handleRequestClose}
           />
-
         </div>
-
       </MuiThemeProvider>
     );
-
   }
 
   handleRequestClose() {
@@ -177,7 +185,6 @@ export default class App extends Component {
 
   /** before the component is loaded to the DOM */
   componentWillMount() {
-
     // Listener for snackbar event
     this.le_showSnackbarListener = applicationContext.addListener(
       GLOBAL_CONSTANTS.LE_SHOW_SNACKBAR,
@@ -189,13 +196,9 @@ export default class App extends Component {
     // Socket stuff
     const socket = applicationContext.getSocket();
 
-    socket.on(
-      "connect",
-      ()=> {
-        this.showSnackBar("socket.io is connected to server");
-      }
-    );
-
+    socket.on('connect', () => {
+      this.showSnackBar('socket.io is connected to server');
+    });
   }
 
   /** before component is removed from the DOM */
@@ -231,3 +234,4 @@ export default class App extends Component {
 
 }// end App
 
+App.propTypes = propTypes;

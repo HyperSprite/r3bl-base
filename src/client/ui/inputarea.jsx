@@ -50,7 +50,7 @@ export default class InputArea extends Component {
   }
 
   /** used to check for ENTER key presses */
-  onKeyPress(e) {
+  onKeyPress(e: () => void) {
     // ENTER is pressed
     if (e.key === 'Enter') {
       // get user input

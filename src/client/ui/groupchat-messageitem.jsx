@@ -21,7 +21,8 @@ export default function GCMessageItem(props: GCMessageItemIF) {
         <Avatar
           size={props.avatarIconSize}
           src={props.chatMessage.photoURL}
-        />}
+        />
+      }
     />
   );
 }
