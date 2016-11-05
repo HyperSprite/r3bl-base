@@ -31,10 +31,10 @@ function getUserDataRootRef(ctx, id) {
   if (lodash.isNil(id)) {
     return ctx.getDatabase()
       .ref(DB_CONST.USER_DATA_ROOT);
+  } else {
+    return ctx.getDatabase()
+      .ref(DB_CONST.USER_DATA_ROOT + '/' + id);
   }
-  return ctx.getDatabase()
-  // Do not use template string below for this
-    .ref(DB_CONST.USER_DATA_ROOT + '/' + id);
 }
 
 /**
@@ -49,9 +49,10 @@ function getUserAccountRootRef(ctx, id) {
   if (lodash.isNil(id)) {
     return ctx.getDatabase()
       .ref(DB_CONST.USER_ACCOUNT_ROOT);
+  } else {
+    return ctx.getDatabase()
+      .ref(DB_CONST.USER_ACCOUNT_ROOT + '/' + id);
   }
-  return ctx.getDatabase()
-    .ref(DB_CONST.USER_ACCOUNT_ROOT + '/' + id);
 }
 
 function processUpdateFromFirebase(snap, ctx) {
@@ -61,20 +62,6 @@ function processUpdateFromFirebase(snap, ctx) {
     return;
   }
   const data: DataIF = value[DB_CONST.DATA_KEY];
-  const payloadSessionId = data[DB_CONST.SESSION_ID];
-  const timestamp = data[DB_CONST.TIMESTAMP];
-  if (!lodash.isNil(payloadSessionId)) {
-    if (lodash.isEqual(payloadSessionId, ctx.getSessionId())) {
-      // do nothing! ignore this change ... it was made by me
-      // this change has been accounted for with dispatched redux
-      // actions already
-      if (LOGGING_ENABLED) {
-        console.log('loadDataForUserAndAttachListenerToFirebase() - ignoring Firebase' +
-                    ' update since I made this change.');
-      }
-      return;
-    }
-  }
   // save the user's data
   ctx.getReduxStore()
       .dispatch(actions.actionSetStateData(data));
@@ -139,11 +126,11 @@ function saveUserAccountDataAndSetUser(ctx, user) {
  */
 function migrateUserAnonToExisting(ctx, oldUid, newUser) {
   // remove the old_user (anon user) account
-  const userAccountRootRef = getUserAccountRootRef(ctx);
+  let userAccountRootRef = getUserAccountRootRef(ctx);
   userAccountRootRef.child(oldUid)
     .remove();
   // remove the old_user (anon user) data
-  const userDataRootRef = getUserDataRootRef(ctx);
+  let userDataRootRef = getUserDataRootRef(ctx);
   userDataRootRef.child(oldUid)
     .remove();
   // get going with the pre-existing user (their data already exists)
@@ -182,7 +169,7 @@ function dealWithUserDataMigration(ctx, user) {
   const oldUid = authStateObject.oldUid;
   const newUid = authStateObject.newUid;
   if (LOGGING_ENABLED) {
-    console.log(`dealWithUserDataMigration(): FROM oldUid=${oldUid} TO newUid=${newUid}`);
+    console.log(`>>  dealWithUserDataMigration(): FROM oldUid=${oldUid} TO newUid=${newUid}`);
   }
   // check to see if new user or existing user
   const projDataRootRef = getUserDataRootRef(ctx);
@@ -207,12 +194,15 @@ function dealWithUserDataMigration(ctx, user) {
  * actually process the auth state change from firebase
  */
 function processAuthStateChange(ctx, user) {
-  if (lodash.isNil(authStateObject.oldUid) && lodash.isNil(authStateObject.newUid)) {
-    // signed-in user is being logged in ...
-    saveUserAccountDataAndSetUser(ctx, user);
-  } else {
+  if (LOGGING_ENABLED) {
+    console.log(`>>> processAuthStateChange oldUid ${authStateObject.oldUid} | newUid ${authStateObject.newUid}`)
+  }
+  if (!lodash.isNil(authStateObject.oldUid) && !lodash.isNil(authStateObject.newUid)) {
     // anon -> new / existing user needs to be taken care of ...
     dealWithUserDataMigration(ctx, user);
+  } else {
+    // signed-in user is being logged in ...
+    saveUserAccountDataAndSetUser(ctx, user);
   }
   // reset the authStateObject!
   authStateObject = {};
