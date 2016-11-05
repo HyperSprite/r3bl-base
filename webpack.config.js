@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const path = require('path');
 
 module.exports = {
   devtool: 'source-map',
@@ -7,7 +6,7 @@ module.exports = {
     // Set up an ES6-ish environment
     'babel-polyfill',
     // Add your application's scripts below
-    './src/client/main.js',
+    './src/client/main.jsx',
   ],
   output: {
     path: './src/server/static_content/assets/',
@@ -20,8 +19,7 @@ module.exports = {
       '',
       '.webpack.js',
       '.web.js',
-      '.ts',
-      '.tsx',
+      '.jsx',
       '.js',
     ],
   },
@@ -40,21 +38,13 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel',
         query: {
-          plugins: ['transform-decorators-legacy', 'transform-runtime'],
+          plugins: ['transform-flow-strip-types', 'transform-decorators-legacy', 'transform-runtime'],
           presets: ['es2015', 'stage-0', 'react'],
         },
-      },
-      {
-        test: /\.tsx?$/,
-        loader: 'ts-loader',
-      },
-      {
-        test: /\.ts?$/,
-        loader: 'ts-loader',
       },
     ],
     preLoaders: [
