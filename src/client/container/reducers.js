@@ -18,10 +18,11 @@ const initialState = {
 // So Flow knows the types for all of the states and actions below.
 
 function addTodo(state, action) {
-  const todoText = action.payload;
+  const todoText: string = action.payload;
+
   if (!lodash.isNil(todoText)) {
-    let dataCopy = lodash.cloneDeep(state.data);
-    const todoObject = {
+    let dataCopy: DataIF = lodash.cloneDeep(state.data);
+    const todoObject: TodoIF = {
       item: todoText,
       done: false,
     };
@@ -41,7 +42,7 @@ function addTodo(state, action) {
 
 function toggleTodo(state, action) {
   try {
-    const index = action.payload;
+    const index: number = action.payload;
     const dataCopy = lodash.cloneDeep(applicationContext.getData());
     const todoObject = dataCopy.todoArray[index];
     todoObject.done = !todoObject.done;
