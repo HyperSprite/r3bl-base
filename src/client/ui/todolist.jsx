@@ -1,13 +1,11 @@
  // @flow
  // HyperSprite-TODO - More flow typing: 1 error
-import React, { Component } from 'react';
-import lodash from 'lodash';
-import { List, ListItem } from 'material-ui';
-import CheckBox from 'material-ui/svg-icons/toggle/check-box';
-import CheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
+import React, { Component, PropTypes } from 'react';
+import { isNil } from 'lodash';
+import { List } from 'material-ui';
 
-import { GLOBAL_CONSTANTS } from '../../global/constants';
-import { applicationContext } from '../container/context';
+import TodoListItem from './todolist-todoitem';
+
 /**
  * this renders the list of todoItems using the data in the LE_SET_DATA event.
  *
@@ -16,6 +14,12 @@ import { applicationContext } from '../container/context';
  * Props that are passed to it: n/a
  * State that it manages: n/a
  */
+
+const propTypes = {
+  todoArray: PropTypes.array,
+  actionToggleTodoIndex: PropTypes.func,
+};
+
 export default class TodoList extends Component {
 
   constructor(props, context) {
@@ -33,15 +37,14 @@ export default class TodoList extends Component {
   scrollToBottom() {
     setTimeout(
       () => {
-        let div = document.getElementById('scroll_todolist');
+        const div = document.getElementById('scroll_todolist');
         div.scrollTop = div.scrollHeight - div.clientHeight;
-        div.animate({scrollTop: div.scrollHeight});
+        div.animate({ scrollTop: div.scrollHeight });
       }, 0
     );
   }
 
   render() {
-
     const {
       todoArray,
       actionToggleTodoIndex,
@@ -49,71 +52,23 @@ export default class TodoList extends Component {
 
     let jsxElements = [];
 
-    if (!lodash.isNil(todoArray)) {
-      todoArray.forEach(
-        (todoItem, index)=> {
-          jsxElements.push(
-            <TodoListItem
-              key={index}
-              index={index}
-              todoItem={todoItem}
-              actionToggleTodoIndex={actionToggleTodoIndex}
-            />
-          );
-        }
+    if (!isNil(todoArray)) {
+      jsxElements = todoArray.map((todoItem, index) =>
+        (
+          <TodoListItem
+            key={index}
+            index={index}
+            todoItem={todoItem}
+            actionToggleTodoIndex={actionToggleTodoIndex}
+          />
+        )
       );
     }
 
     return (
       <List className="todolist">{jsxElements}</List>
     );
-
   }
-
 }
 
-/**
- * this is a simple component which renders a single todoItem based on the props
- *
- * Props that are passed to it: todoItem
- * State that it manages: n/a
- */
-class TodoListItem extends Component {
-
-  render() {
-
-    const todoItem = this.props.todoItem;
-    const done = todoItem.done;
-    const text = todoItem.item;
-
-    if (done) {
-      return (
-        <ListItem
-          primaryText={text}
-          onClick={::this.onClick}
-          rightIcon={<CheckBox />}
-        />
-      );
-    } else {
-      return (
-        <ListItem
-          primaryText={text}
-          onClick={::this.onClick}
-          rightIcon={<CheckBoxOutlineBlank />}
-        />
-      );
-    }
-
-  }
-
-  onClick(e) {
-    let {
-      index,
-      actionToggleTodoIndex
-    } = this.props;
-    actionToggleTodoIndex(index);
-  }
-
-}
-
-// export {TodoList}
+TodoList.propTypes = propTypes;
