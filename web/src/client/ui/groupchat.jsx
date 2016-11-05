@@ -8,9 +8,11 @@ import { GLOBAL_CONSTANTS } from '../../global/constants';
 import GCMessageItem from './groupchat-messageitem';
 
 const propTypes = {};
+type Props = any;
 
 export default class GroupChat extends Component {
-  constructor(props, context) {
+
+  constructor(props: Props, context: {}) {
     super(props, context);
     this.state = { chatMessageList: [] };
   }
@@ -23,7 +25,7 @@ export default class GroupChat extends Component {
     });
     // respond to changes in presence
     applicationContext.addListener(GLOBAL_CONSTANTS.LE_PRESENCE_USER_ADDED, (presence) => {
-      const msg = {
+      const msg: ChatMessageIF = {
         message: `${presence.user.displayName} joined`,
         displayName: 'The App',
         photoURL: 'assets/favicon.png',
@@ -32,7 +34,7 @@ export default class GroupChat extends Component {
       this.rcvMsgFromServer(msg);
     });
     applicationContext.addListener(GLOBAL_CONSTANTS.LE_PRESENCE_USER_REMOVED, (presence) => {
-      const msg = {
+      const msg: ChatMessageIF = {
         message: `${presence.user.displayName} left`,
         displayName: 'The App',
         photoURL: 'assets/favicon.png',
@@ -41,7 +43,7 @@ export default class GroupChat extends Component {
       this.rcvMsgFromServer(msg);
     });
     applicationContext.addListener(GLOBAL_CONSTANTS.LE_PRESENCE_USER_CHANGED, (presence) => {
-      const msg = {
+      const msg: ChatMessageIF = {
         message: `${presence.user.displayName} is ${presence.status}`,
         displayName: 'The App',
         photoURL: 'assets/favicon.png',
@@ -60,14 +62,41 @@ export default class GroupChat extends Component {
       div.animate({ scrollTop: div.scrollHeight });
     }, 0);
   }
-  rcvMsgFromServer(data) {
+  rcvMsgFromServer(data: ChatMessageIF) {
     const { chatMessageList } = this.state;
-    let copy = lodash.clone(chatMessageList);
+    const copy = lodash.clone(chatMessageList);
     copy.push(data);
     this.setState({ chatMessageList: copy });
   }
+
+  renderMessageList(chatMessageList: Array<ChatMessageIF>) {
+    const jsxElements = [];
+    const avatarIconSize: number = 32;
+    if (!lodash.isNil(chatMessageList)) {
+      chatMessageList.forEach((chatMessage, index) => {
+        jsxElements.push(
+          <GCMessageItem
+            key={index}
+            index={index}
+            chatMessage={chatMessage}
+            avatarIconSize={avatarIconSize}
+          />
+        );
+      });
+    }
+    return (<List className="todolist">{jsxElements}</List>);
+  }
+  renderEmptyMsg(style: GCMessageStyleIF) {
+    return (
+      <div>
+        <Paper zDepth={3} style={style}>
+          There are no messages right now. Please type a message below.
+        </Paper>
+      </div>
+    );
+  }
   render() {
-    const style = {
+    const style: GCMessageStyleIF = {
       height: '50pt',
       width: '95%',
       margin: 20,
@@ -75,29 +104,12 @@ export default class GroupChat extends Component {
       textAlign: 'center',
       display: 'inline-block',
     };
+
     const { chatMessageList } = this.state;
     if (chatMessageList.length === 0) {
-      return this._renderEmptyMsg(style);
+      return this.renderEmptyMsg(style);
     }
-    else {
-      return this._renderMessageList(chatMessageList);
-    }
-  }
-  _renderMessageList(chatMessageList) {
-    let jsxElements = [];
-    if (!lodash.isNil(chatMessageList)) {
-      chatMessageList.forEach((chatMessage, index) => {
-        jsxElements.push(<GCMessageItem key={index} index={index} chatMessage={chatMessage} />);
-      });
-    }
-    return (<List className="todolist">{jsxElements}</List>);
-  }
-  _renderEmptyMsg(style) {
-    return (<div>
-    <Paper zDepth={3} style={style}>
-      There are no messages right now. Please type a message below.
-    </Paper>
-    </div>);
+    return this.renderMessageList(chatMessageList);
   }
 }
 

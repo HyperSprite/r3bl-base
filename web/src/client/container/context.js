@@ -1,10 +1,12 @@
 // @flow weak
 // HyperSprite-TODO - More flow typing: 19 errors on weak
+import firebase from 'firebase';
+import io from 'socket.io-client';
 import lodash from 'lodash';
 import events from 'events';
 import { createStore } from 'redux';
 
-import { GLOBAL_CONSTANTS, LOGGING_ENABLED } from '../../global/constants';
+import { GLOBAL_CONSTANTS, LOGGING_ENABLED, FIREBASE_CONFIG } from '../../global/constants';
 import * as reducers from './reducers';
 import * as actions from './actions';
 import persistence from './firebase';
@@ -42,10 +44,9 @@ class ApplicationContext {
     if (!lodash.isEqual(hostname, 'localhost')) {
       // prod app
       return true;
-    } else {
-      // dev app
-      return false;
     }
+    // dev app
+    return false;
   }
   isDevelopment() {
     return !this.isProduction();
@@ -71,7 +72,6 @@ class ApplicationContext {
    * this sets up the socket object for use by this context
    */
   initSocket() {
-    const io = require('socket.io-client');
     this.socket = new io.connect();
   }
   /**
@@ -147,9 +147,8 @@ class ApplicationContext {
   }
   /** setup the internal firebase object */
   initFirebase() {
-    this.firebase = require('firebase');
-    const config = require('../../global/constants').FIREBASE_CONFIG;
-    this.firebase.initializeApp(config);
+    this.firebase = firebase;
+    this.firebase.initializeApp(FIREBASE_CONFIG);
   }
   /**
    * get a ref to the firebase instance
@@ -199,14 +198,14 @@ class ApplicationContext {
    * @returns the listener that is passed as param
    */
   addListener(eventName, listener) {
-    function logging_listener() {
+    function loggingListener() {
       if (LOGGING_ENABLED) {
         console.log(`listener: for eventName ${eventName} responding`);
       }
       listener.apply(this, arguments);
     }
-    this.eventEmitter.addListener(eventName, logging_listener);
-    return logging_listener;
+    this.eventEmitter.addListener(eventName, loggingListener);
+    return loggingListener;
   }
   /** convenience method to remove listener for event */
   removeListener(eventName, listener) {
@@ -219,9 +218,9 @@ class ApplicationContext {
    */
   initReduxStore() {
     try {
-      this.reduxStore = createStore(reducers.reducer_main, null, window.devToolsExtension && window.devToolsExtension());
+      this.reduxStore = createStore(reducers.reducerMain, null, window.devToolsExtension && window.devToolsExtension());
     } catch (e) {
-      this.reduxStore = createStore(reducers.reducer_main, null);
+      this.reduxStore = createStore(reducers.reducerMain, null);
     }
     // explicitly INIT Redux!
     this.reduxStore.dispatch(actions.actionInit());
@@ -234,14 +233,14 @@ class ApplicationContext {
     // if (USE_REDUX_DEVTOOLS) {
     //   // the following line uses chrome devtools redux plugin
     //   this.reduxStore = createStore(
-    //     reducers.reducer_main,
+    //     reducers.reducerMain,
     //     null,
     //     window.devToolsExtension && window.devToolsExtension()
     //   );
     // }
     // else {
     //   this.reduxStore = createStore(
-    //     reducers.reducer_main,
+    //     reducers.reducerMain,
     //     null
     //   );
     // }

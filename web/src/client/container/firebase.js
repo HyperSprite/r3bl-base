@@ -51,7 +51,7 @@ function getUserAccountRootRef(ctx, id) {
       .ref(DB_CONST.USER_ACCOUNT_ROOT);
   }
   return ctx.getDatabase()
-    .ref(`${DB_CONST.USER_ACCOUNT_ROOT}/${id}`);
+    .ref(DB_CONST.USER_ACCOUNT_ROOT + '/' + id);
 }
 
 function processUpdateFromFirebase(snap, ctx) {
@@ -287,7 +287,7 @@ persistence.forceSignIn = (ctx) => {
       const newUid = newUser.uid;
       authStateObject = {
         old_user: ctx.getUser(),
-        newUser: newUser,
+        newUser, // ES6 property shorthand === newUser: newUser,
         oldUid: ctx.getUserId(),
         newUid: newUser.uid,
       };
