@@ -13,6 +13,11 @@ public class MyApplication extends Application {
 
 private static final String TAG = MyApplication.class.getSimpleName();
 private BaseStore<MyApplicationState> _store;
+private MyApplicationAuth _auth;
+
+//
+// Constructor
+//
 
 @Override
 public void onCreate() {
@@ -25,8 +30,26 @@ public void onCreate() {
   String msg = getStore().getState().toString();
   Log.d(TAG, String.format("{%s}", msg));
 
+  _initFirebaseAuth();
+
   Log.d(TAG, String.format("onCreate: [END]", msg));
 }
+
+//
+// Auth
+//
+
+private void _initFirebaseAuth() {
+   _auth = new MyApplicationAuth(this);
+}
+
+public MyApplicationAuth getAuth() {
+  return _auth;
+}
+
+//
+// Redux store
+//
 
 private void _initReduxStore() {
   MyApplicationState state = new MyApplicationState();
