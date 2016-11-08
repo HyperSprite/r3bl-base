@@ -2,37 +2,44 @@ package com.example.nazmul.applicationtest.container;
 
 import android.app.Application;
 import android.util.Log;
-
-import java.util.HashMap;
-import java.util.Random;
+import com.brianegan.bansa.BaseStore;
+import com.brianegan.bansa.Reducer;
 
 /**
  * Created by nazmul on 10/26/16.
  */
 
 public class MyApplication extends Application {
+
 private static final String TAG = MyApplication.class.getSimpleName();
-private HashMap<String, String> _state;
+private BaseStore<MyApplicationState> _store;
 
 @Override
 public void onCreate() {
   super.onCreate();
   Log.d(TAG, "onCreate: [START]");
-  _state = new HashMap<String, String>();
-  Log.d(TAG, "onCreate: created a new state object");
-  _state.put(String.valueOf(new Random().nextInt(1000)), "value");
-  String msg = _state.toString();
-  Log.d(TAG, String.format("onCreate: {%s} [END]", msg));
+
+  _initReduxStore();
+
+  Log.d(TAG, "onCreate: created a new redux store object");
+  String msg = getStore().getState().toString();
+  Log.d(TAG, String.format("{%s}", msg));
+
+  Log.d(TAG, String.format("onCreate: [END]", msg));
 }
 
-@Override
-public void onTerminate() {
-  super.onTerminate();
-  Log.d(TAG, "onTerminate: ran");
+private void _initReduxStore() {
+  MyApplicationState state = new MyApplicationState();
+  Reducer<MyApplicationState> reducer = new MyApplicationReducer();
+  _store = new BaseStore<>(state, reducer);
 }
 
-public HashMap<String, String> getState(){
-  return _state;
+public MyApplicationState getState() {
+  return _store.getState();
 }
 
+public BaseStore<MyApplicationState> getStore() {
+  return _store;
 }
+
+}// end MyApplication class
