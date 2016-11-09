@@ -37,18 +37,23 @@
     "react-tap-event-plugin": "^1.0.0",
     "redux": "^3.5.2",
     "socket.io": "^1.4.8",
+    "socket.io-client": "^1.5.1",
     "source-map-loader": "^0.1.5",
-    "ts-loader": "^0.8.2",
-    "typescript": "^2.0.3",
     "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-middleware": "^1.8.4",
+    "webpack-hot-middleware": "^2.13.0"
   },
   "scripts": {
-    "dev": "webpack-dev-server --content-base src/server/static_content/ & node_modules/.bin/nodemon src/server/main/server_main.js",
-    "postinstall": "webpack -p",
+    "test": "node_modules/.bin/nodemon src/server/main/server_main.js test=true",
+    "test-postinstall": "webpack --progress",
+    "dev": "node_modules/.bin/nodemon src/server/main/server_main.js",
+    "postinstall": "webpack -p --progress",
     "start": "NODE_ENV=production node src/server/main/server_main.js"
   },
   "author": "Nazmul Idris",
   "license": "Apache-2.0",
-  "devDependencies": {}
+  "devDependencies": {
+    "flow-bin": "^0.33.0",
+    "react-hot-loader": "^1.3.0"
+  }
 }

@@ -1,110 +1,112 @@
-/**
- * this node server is used for enabling group chat functionality in the client webapp.
- *
- * it uses: socket.io
- *
- * server ports:
- *    express server
- *        dev: port 3333
- *        prod: port 80
- */
+// This server_main.js covers Production, Dev and Test
+// For mor information see the web/src/server/README.md
 
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const io = require('socket.io');
+const lodash = require('lodash');
 const GLOBAL_CONSTANTS = require('../../global/constants').GLOBAL_CONSTANTS;
 
-/**
- * get the NODE_ENV environment var value from node -
- * can be null, or set to "production", or "development"
- */
-const NODE_ENV = process.env.NODE_ENV;
-const lodash = require("lodash");
+const app = express();
+const isSSL = fs.existsSync(`${__dirname}/../ssl/cert.pem`);
+const rootDir = `${__dirname}/../static_content/`;
+const port = process.env.PORT || 3080;
+const portS = (port * 1) + 363;
+let httpServer;
 
-let isProduction = false;
-if (!lodash.isNil(NODE_ENV)) {
-  if (lodash.isEqual(NODE_ENV, "production")) isProduction = true;
-}
 
-console.log("**** Server isProduction: " + isProduction + " ****");
+isSSL ?
+  console.log('**** Using SSL certs') :
+  console.log('**** No SSL certs');
 
-/**
- * socket.io
- * more info
- * - https://nodesource.com/blog/understanding-socketio/
- * - https://devcenter.heroku.com/articles/node-websockets
- */
-
-let socketio;
-
-/**
- * start server on port 8080 if in DEV
- */
-if (!isProduction) {
-  let http = require('http');
-  let httpServer = http.createServer(
-    (req, res)=> {
-      res.writeHead(200, {"Content-Type": "text/html"});
-      res.end("<h1>Socket IO Server Running</h1>");
+// redirect if insecure and SSL
+if (isSSL) {
+  app.all('*', (req, res, next) => {
+    if (req.secure) {
+      return next();
     }
-  );
-  httpServer.listen(8080);
-  let io = require("socket.io");
-  socketio = io(httpServer);
+    res.redirect(`https://${req.hostname}:${portS}${req.url}`);
+  });
 }
 
-/**
- * express server for production mode
- * more info
- * - webpack + express: https://youtu.be/cdUyEou0LHg
- * - webpack + express: https://youtu.be/Ru3Rj_hM8bo
- * - node env vars: http://goo.gl/k4mFC8
- */
-if (isProduction) {
-  const express = require("express");
-  const path = require("path");
-  const port = process.env.PORT || 3333;
-  const app = express();
-  
-  let root_dir = __dirname + '/../static_content/';
-  
-  app.use(express.static(root_dir));
-  
-  app.get(
-    "*", (req, res)=> {
-      res.sendFile(path.resolve(root_dir, "index.html"));
-    }
-  );
-  
-  let httpServer = app.listen(port);
-  
-  console.log("Production Server started on port: " + port);
-  
-  let io = require("socket.io");
-  socketio = io.listen(httpServer);
+// Webpack dev server setup
+if (process.env.NODE_ENV !== 'production') {
+  console.log('**** Using Webpack Dev Middleware');
+  const test = process.argv[2] || false;
+
+  const webpack = require('webpack');
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
+  const webpackConfig = require('../../../webpack.dev.config');
+  const compiler = webpack(webpackConfig);
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath,
+  }));
+  app.use(webpackHotMiddleware(compiler));
 }
 
-/**
- * socket.io
- */
+app.use(express.static(rootDir));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(rootDir, 'index.html'));
+});
+
+// 404 catch-all handler (middleware)
+app.use((req, res) => {
+  console.log(`>>>> 404 URL : ${req.url}`);
+  console.log(`>>>> 404 IP  : ${req.ip}`);
+  res.redirect('/');
+});
+
+// 500 error handler (middleware)
+app.use((err, req, res) => {
+  console.log('!!!! 500 ', err.stack);
+  res.status(500).render('500');
+});
+
+// HTTPS
+if (isSSL) {
+  httpServer = https.createServer({
+    key: fs.readFileSync(`${__dirname}/../ssl/cert.pem`),
+    cert: fs.readFileSync(`${__dirname}/../ssl/cert.crt`),
+  }, app).listen(portS, () => {
+    console.log(`**** HTTPS ${app.get('env')} https://localhost:${portS}`);
+  });
+  const insecureServer = http.createServer(app).listen(port, () => {
+    console.log(`**** HTTP ${app.get('env')} http://localhost:${port}`);
+  });
+} else {
+  httpServer = http.createServer(app).listen(port, () => {
+    console.log(`**** HTTP ${app.get('env')} http://localhost:${port}`);
+  });
+}
+
+// socket.io
+const socketio = io.listen(httpServer);
+
 if (!lodash.isNil(socketio))
   socketio.on(
-    "connection",
-    (socket)=> {
-      
+    'connection',
+    (socket) => {
+
       socket.on(
         GLOBAL_CONSTANTS.REMOTE_MESSAGE_FROM_CLIENT,
-        (data)=> {
-          console.log("Received message from client: " + JSON.stringify(data));
+        (data) => {
+          console.log(`Received message from client: ${JSON.stringify(data)}`);
           // socket.broadcast.emit(GLOBAL_CONSTANTS.REMOTE_MESSAGE_FROM_SERVER, data);
           // socket.emit(GLOBAL_CONSTANTS.REMOTE_MESSAGE_FROM_SERVER, data);
-          socketio.sockets.emit(GLOBAL_CONSTANTS.REMOTE_MESSAGE_FROM_SERVER, data)
+          socketio.sockets.emit(GLOBAL_CONSTANTS.REMOTE_MESSAGE_FROM_SERVER, data);
         }
       );
-      
+
       socket.on(
-        "disconnect",
-        ()=> {
-          console.log("Socket has disconnected");
+        'disconnect',
+        () => {
+          console.log('Socket has disconnected');
         }
-      )
-      
+      );
     }
   );
