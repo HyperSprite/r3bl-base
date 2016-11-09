@@ -1,0 +1,5 @@
+[ignore]
+<PROJECT_ROOT>/node_modules/fbjs/.*
+
+[libs]
+<PROJECT_ROOT>/flow-typed/interface.js

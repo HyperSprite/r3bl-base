@@ -2,14 +2,16 @@ const webpack = require('webpack');
 
 module.exports = {
   devtool: 'source-map',
+  context: __dirname,
   entry: [
     // Set up an ES6-ish environment
     'babel-polyfill',
     // Add your application's scripts below
+    'webpack-hot-middleware/client',
     './src/client/main.jsx',
   ],
   output: {
-    path: './src/server/static_content/assets/',
+    path: '/../../static_content/assets/',
     publicPath: '/assets/',
     filename: 'bundle.js',
   },
@@ -24,27 +26,14 @@ module.exports = {
     ],
   },
   plugins: [
-    // new webpack.DefinePlugin({
-    //   'process.env': {
-    //     NODE_ENV: JSON.stringify('production'),
-    //   },
-    // }),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: true,
-    //   },
-    // }),
+    new webpack.HotModuleReplacementPlugin(),
   ],
   module: {
     loaders: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loader: 'babel',
-        query: {
-          plugins: ['transform-flow-strip-types', 'transform-decorators-legacy', 'transform-runtime'],
-          presets: ['es2015', 'stage-0', 'react'],
-        },
+        loaders: ['react-hot', 'babel'],
       },
     ],
     preLoaders: [
