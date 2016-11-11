@@ -4,13 +4,13 @@
  * Created by nazmul on 9/2/16.
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 import lodash from 'lodash';
-import { AppBar, Avatar, IconButton } from 'material-ui';
+import {AppBar, Avatar, IconButton} from 'material-ui';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 
-import { GLOBAL_CONSTANTS } from '../../global/constants';
-import { applicationContext } from '../container/context';
+import {GLOBAL_CONSTANTS} from '../../global/constants';
+import {applicationContext} from '../container/context';
 
 /**
  * material UI icons
@@ -33,14 +33,15 @@ import { applicationContext } from '../container/context';
 // };
 
 export default class Header extends Component {
-
+  
   constructor(props, context) {
     super(props, context);
   }
+  
   loginAction() {
     // get the App object from the React context
     const app = this.context.app;
-
+    
     if (applicationContext.isUserSet()) {
       if (applicationContext.getUser().isAnonymous) {
         // go from anonauth->signedinauth
@@ -56,22 +57,22 @@ export default class Header extends Component {
       app.showSnackBar('should never happen -> user must be set');
     }
   }
-
+  
   render() {
-    const { user } = this.props;
-
+    const {user} = this.props;
+    
     // depending on whether the user is signed in or not, provide different appbar
     let titleString = 'Todo List Sample App';
-
+    
     const avatarIconSize = 32;
     const customPadding = {
       padding: 8,
     };
-
+    
     // depending on whether the user is signed in or not, provide different appbar
     let srcPhotoURL = null;
     let iconAction = null;
-
+    
     if (applicationContext.isUserSet() && !applicationContext.getUser().isAnonymous) {
       // SIGNEDIN
       srcPhotoURL = applicationContext.getUser().photoURL || null;
@@ -79,7 +80,7 @@ export default class Header extends Component {
     } else {
       iconAction = <ActionAccountCircle /> || null;
     }
-
+    
     return (
       <AppBar
         className="appbar_in_main"
@@ -99,12 +100,12 @@ export default class Header extends Component {
       />
     );
   } // end render()
-
+  
   /** tell react that we have this object in the context ... note static keyword */
   static contextTypes = {
     app: React.PropTypes.object.isRequired,
   }
-
+  
 }// end class Header
 
 // export default Header;
