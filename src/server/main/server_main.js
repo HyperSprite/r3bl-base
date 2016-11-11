@@ -24,64 +24,88 @@ isSSL ?
 
 // redirect if insecure and SSL
 if (isSSL) {
-  app.all('*', (req, res, next) => {
-    if (req.secure) {
-      return next();
+  app.all(
+    '*', (req, res, next) => {
+      if (req.secure) {
+        return next();
+      }
+      res.redirect(`https://${req.hostname}:${portS}${req.url}`);
     }
-    res.redirect(`https://${req.hostname}:${portS}${req.url}`);
-  });
+  );
 }
 
 // Webpack dev server setup
 if (process.env.NODE_ENV !== 'production') {
   console.log('**** Using Webpack Dev Middleware');
   const test = process.argv[2] || false;
-
+  
   const webpack = require('webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
   const webpackConfig = require('../../../webpack.dev.config');
   const compiler = webpack(webpackConfig);
-  app.use(webpackDevMiddleware(compiler, {
-    publicPath: webpackConfig.output.publicPath,
-  }));
+  app.use(
+    webpackDevMiddleware(
+      compiler, {
+        publicPath: webpackConfig.output.publicPath,
+      }
+    )
+  );
   app.use(webpackHotMiddleware(compiler));
 }
 
 app.use(express.static(rootDir));
 
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve(rootDir, 'index.html'));
-});
+app.get(
+  '/', (req, res) => {
+    res.sendFile(path.resolve(rootDir, 'index.html'));
+  }
+);
 
 // 404 catch-all handler (middleware)
-app.use((req, res) => {
-  console.log(`>>>> 404 URL : ${req.url}`);
-  console.log(`>>>> 404 IP  : ${req.ip}`);
-  res.redirect('/');
-});
+app.use(
+  (req, res) => {
+    console.log(`>>>> 404 URL : ${req.url}`);
+    console.log(`>>>> 404 IP  : ${req.ip}`);
+    res.redirect('/');
+  }
+);
 
 // 500 error handler (middleware)
-app.use((err, req, res) => {
-  console.log('!!!! 500 ', err.stack);
-  res.status(500).render('500');
-});
+app.use(
+  (err, req, res) => {
+    console.log('!!!! 500 ', err.stack);
+    res.status(500)
+       .render('500');
+  }
+);
 
 // HTTPS
 if (isSSL) {
-  httpServer = https.createServer({
-    key: fs.readFileSync(`${__dirname}/../ssl/cert.pem`),
-    cert: fs.readFileSync(`${__dirname}/../ssl/cert.crt`),
-  }, app).listen(portS, () => {
-    console.log(`**** HTTPS ${app.get('env')} https://localhost:${portS}`);
-  });
-  const insecureServer = http.createServer(app).listen(port, () => {
-    console.log(`**** HTTP ${app.get('env')} http://localhost:${port}`);
-  });
+  httpServer = https.createServer(
+    {
+      key: fs.readFileSync(`${__dirname}/../ssl/cert.pem`),
+      cert: fs.readFileSync(`${__dirname}/../ssl/cert.crt`),
+    }, app
+                    )
+                    .listen(
+                      portS, () => {
+                        console.log(`**** HTTPS ${app.get('env')} https://localhost:${portS}`);
+                      }
+                    );
+  const insecureServer = http.createServer(app)
+                             .listen(
+                               port, () => {
+                                 console.log(`**** HTTP ${app.get('env')} http://localhost:${port}`);
+                               }
+                             );
 } else {
-  httpServer = http.createServer(app).listen(port, () => {
-    console.log(`**** HTTP ${app.get('env')} http://localhost:${port}`);
-  });
+  httpServer = http.createServer(app)
+                   .listen(
+                     port, () => {
+                       console.log(`**** HTTP ${app.get('env')} http://localhost:${port}`);
+                     }
+                   );
 }
 
 // socket.io
@@ -91,7 +115,7 @@ if (!lodash.isNil(socketio))
   socketio.on(
     'connection',
     (socket) => {
-
+      
       socket.on(
         GLOBAL_CONSTANTS.REMOTE_MESSAGE_FROM_CLIENT,
         (data) => {
@@ -101,7 +125,7 @@ if (!lodash.isNil(socketio))
           socketio.sockets.emit(GLOBAL_CONSTANTS.REMOTE_MESSAGE_FROM_SERVER, data);
         }
       );
-
+      
       socket.on(
         'disconnect',
         () => {

@@ -1,11 +1,11 @@
 // @flow
 // HyperSprite-TODO - More flow typing: 1 error
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 import lodash from 'lodash';
-import { TextField } from 'material-ui';
+import {TextField} from 'material-ui';
 
-import { GLOBAL_CONSTANTS } from '../../global/constants';
-import { applicationContext } from '../container/context';
+import {GLOBAL_CONSTANTS} from '../../global/constants';
+import {applicationContext} from '../container/context';
 
 const propTypes = {
   user: PropTypes.object,
@@ -31,36 +31,36 @@ const propTypes = {
  * - http://reactkungfu.com/2016/01/react-context-feature-in-practice/
  */
 export default class InputArea extends Component {
-
+  
   /** tell react that we have this object in the context ... note static keyword */
   static contextTypes = {
     app: React.PropTypes.object.isRequired,
   }
-
+  
   constructor(props: {}, context: any) {
     super(props, context);
-    this.state = { inputValue: '' };
-
+    this.state = {inputValue: ''};
+    
     this.onChange = this.onChange.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
   }
-
+  
   state: {
     inputValue: string;
   }
-
+  
   /** used to check for ENTER key presses */
   onKeyPress(e: () => void) {
     // ENTER is pressed
     if (e.key === 'Enter') {
       // get user input
       const newval = e.target.value;
-
+      
       // reset the text input field
-      this.setState({ inputValue: '' });
-      const { type, user } = this.props;
-      const { app } = this.context;
-
+      this.setState({inputValue: ''});
+      const {type, user} = this.props;
+      const {app} = this.context;
+      
       if (lodash.isEqual(type, 'todo')) {
         // call passed action to update redux!
         this.props.actionAddTodoText(newval);
@@ -86,20 +86,20 @@ export default class InputArea extends Component {
       }
     }
   }
-
+  
   /** used to sync user input w/ component state */
   onChange(e) {
-    this.setState({ inputValue: e.target.value });
+    this.setState({inputValue: e.target.value});
   }
-
+  
   render() {
-    const { user, type } = this.props;
+    const {user, type} = this.props;
     const labeltextTodo = 'Add a todo';
     const labeltextChat = 'Write a group chat message';
     const labeltextCantChat = 'Must sign in to chat';
     let labeltext;
     let textFieldDisabled = false;
-
+    
     if (lodash.isEqual(type, 'todo')) {
       labeltext = labeltextTodo;
       textFieldDisabled = false;
@@ -107,7 +107,7 @@ export default class InputArea extends Component {
       labeltext = labeltextCantChat;
       textFieldDisabled = true;
     }
-
+    
     if (!lodash.isNil(user)) {
       if (!user.isAnonymous) {
         // user is signed in && not anonymous
@@ -120,13 +120,13 @@ export default class InputArea extends Component {
         }
       }
     }
-
+    
     const style = {
       height: 56,
       paddingLeft: 16,
       fontFamily: 'Roboto Mono',
     };
-
+    
     return (
       <TextField
         style={style}
@@ -139,7 +139,7 @@ export default class InputArea extends Component {
       />
     );
   }
-
+  
 }
 
 // export default InputArea;

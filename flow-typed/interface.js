@@ -80,8 +80,8 @@ export type ApplicationContextIF = {
 // these are Action Creator Strings, see actions.js file
 export type ActionStrings = (
   'SET_STATE_USER' |
-  'SET_STATE_DATA' |
-  'ADD_TODO' |
-  'TOGGLE_TODO' |
-  'REDUX_INIT'
-)
+    'SET_STATE_DATA' |
+    'ADD_TODO' |
+    'TOGGLE_TODO' |
+    'REDUX_INIT'
+  )
