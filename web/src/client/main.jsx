@@ -1,13 +1,13 @@
- // @flow
- //
+// @flow
+//
 /**
  * this is the main entry point for the web app
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import App from './ui/app';
-import { applicationContext } from './container/context';
+import {applicationContext} from './container/context';
 
 /** Material UI requirement */
 import injectTapEventPlugin from 'react-tap-event-plugin';

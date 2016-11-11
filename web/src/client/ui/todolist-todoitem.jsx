@@ -1,7 +1,7 @@
- // @flow
- // HyperSprite-TODO - More flow typing: 1 error
-import React, { Component, PropTypes } from 'react';
-import { ListItem } from 'material-ui';
+// @flow
+// HyperSprite-TODO - More flow typing: 1 error
+import React, {Component, PropTypes} from 'react';
+import {ListItem} from 'material-ui';
 import CheckBox from 'material-ui/svg-icons/toggle/check-box';
 import CheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
 /**
@@ -19,28 +19,28 @@ const propTypes = {
 };
 
 export default class TodoItem extends Component {
-
+  
   // props: Props;
-
+  
   constructor(...props: Array<void>) {
     super(...props);
     this.onClick = this.onClick.bind(this);
   }
-
+  
   onClick() {
-    const { index, actionToggleTodoIndex } = this.props;
+    const {index, actionToggleTodoIndex} = this.props;
     actionToggleTodoIndex(index);
   }
-
-
+  
+  
   render() {
     const todoItem = this.props.todoItem;
     const done = todoItem.done;
     const text = todoItem.item;
     const doneState = done ?
       <CheckBox /> :
-        <CheckBoxOutlineBlank />;
-
+      <CheckBoxOutlineBlank />;
+    
     return (
       <ListItem
         primaryText={text}

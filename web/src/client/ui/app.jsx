@@ -1,7 +1,7 @@
 // @flow
 // HyperSprite-TODO - More flow typing: 15 errors
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 import lodash from 'lodash';
 /** Material UI stuff */
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -11,11 +11,11 @@ import {
   grey900,
   blueGrey200,
 } from 'material-ui/styles/colors';
-import { Snackbar } from 'material-ui';
+import {Snackbar} from 'material-ui';
 
-import { GLOBAL_CONSTANTS } from '../../global/constants';
+import {GLOBAL_CONSTANTS} from '../../global/constants';
 import * as actions from '../container/actions';
-import { applicationContext, bindActionCreators } from '../container/context';
+import {applicationContext, bindActionCreators} from '../container/context';
 
 import InputArea from './inputarea';
 import TodoList from './todolist';
@@ -92,17 +92,17 @@ const propTypes = {
 )
 
 export default class App extends Component {
-
+  
   constructor(props, context) {
     super(props, context);
-
+    
     // these keys control the state of the snackbar component
     this.state = {
       snackbar_open: false,
       snackbar_msg: "Default Message",
     };
   }
-
+  
   render() {
     const {
       data,
@@ -110,16 +110,16 @@ export default class App extends Component {
       actionAddTodoText,
       actionToggleTodoIndex,
     } = this.props;
-
+    
     const todoArray = lodash.isNil(data) ? null : data.todoArray;
-
+    
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <div className="container">
-
-            <Header user={user} />
-
+            
+            <Header user={user}/>
+            
             <div className="content">
               <div className="side_container_in_content">
                 <div id="scroll_todolist" className="todolist_items">
@@ -149,7 +149,7 @@ export default class App extends Component {
               </div>
             </div>
           </div>
-
+          
           <Snackbar
             message={this.state.snackbar_msg}
             open={this.state.snackbar_open}
@@ -160,11 +160,11 @@ export default class App extends Component {
       </MuiThemeProvider>
     );
   }
-
+  
   handleRequestClose() {
     this.showSnackBar(null);
   }
-
+  
   showSnackBar(msg) {
     if (lodash.isNil(msg)) {
       this.setState(
@@ -182,7 +182,7 @@ export default class App extends Component {
       );
     }
   }
-
+  
   /** before the component is loaded to the DOM */
   componentWillMount() {
     // Listener for snackbar event
@@ -192,15 +192,17 @@ export default class App extends Component {
         this.showSnackBar(param);
       }
     );
-
+    
     // Socket stuff
     const socket = applicationContext.getSocket();
-
-    socket.on('connect', () => {
-      this.showSnackBar('socket.io is connected to server');
-    });
+    
+    socket.on(
+      'connect', () => {
+        this.showSnackBar('socket.io is connected to server');
+      }
+    );
   }
-
+  
   /** before component is removed from the DOM */
   componentWillUnmount() {
     // remove listeners
@@ -208,30 +210,30 @@ export default class App extends Component {
     // disconnect socket
     applicationContext.disconnectSocket();
   }
-
+  
   /** actually write the data to the socket and update the snackbar */
   sndMsgToServer(data) {
     applicationContext.emitToServer(GLOBAL_CONSTANTS.REMOTE_MESSAGE_FROM_CLIENT, data);
     this.showSnackBar(`send text to server: ${data}`);
   }
-
+  
   /** called by socket.io, when data is received from the server */
   rcvMsgFromServer(data) {
     this.showSnackBar(data);
   }
-
+  
   /** put app in the context, which will be passed down to the children */
   getChildContext() {
     return {
       app: this,
     };
   }
-
+  
   /** tell react that we have this object in the context ... note static keyword */
   static childContextTypes = {
     app: React.PropTypes.object.isRequired,
   }
-
+  
 }// end App
 
 App.propTypes = propTypes;

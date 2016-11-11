@@ -2,18 +2,20 @@ package com.r3bl.nazmul.todoapp.container;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
- * Created by nazmul on 11/8/16.
+ * Created by nazmul on 11/10/16.
  */
+public class TodoItem implements Serializable {
+public TodoItem(String item, boolean done) {
+  this.done = done;
+  this.item = item;
+}
 
-public class MyApplicationState implements Serializable {
-UserObject          user      = null;
-ArrayList<TodoItem> todoArray = null;
+boolean done;
+String  item;
 
 @Override
 public String toString() {
@@ -23,8 +25,4 @@ public String toString() {
   return gson.toJson(this);
 }
 
-public MyApplicationState deepCopy() {
-  return SerializationUtils.clone(this);
-}
-
-}// end class ApplicationState
+}// end class TodoItem
