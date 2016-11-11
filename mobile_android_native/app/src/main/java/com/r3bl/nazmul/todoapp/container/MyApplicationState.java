@@ -1,20 +1,25 @@
 package com.r3bl.nazmul.todoapp.container;
 
-import java.util.Random;
+import org.apache.commons.lang3.SerializationUtils;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by nazmul on 11/8/16.
  */
 
+public class MyApplicationState implements Serializable {
+UserObject          user              = null;
+ArrayList<TodoItem> todoItemArrayList = null;
 
-// TODO: 11/8/16 actually describe the app state
-public class MyApplicationState {
-  String user = String.valueOf(new Random().nextInt(1000));
-  String data = "data not set";
+@Override
+public String toString() {
+  return String.format("Redux State: user=%s, data=%s", user, todoItemArrayList);
+}
 
-  @Override
-  public String toString() {
-    return String.format("Redux State: user=%s, data=%s", user, data);
-  }
+public MyApplicationState deepCopy() {
+  return SerializationUtils.clone(this);
+}
 
 }// end class ApplicationState

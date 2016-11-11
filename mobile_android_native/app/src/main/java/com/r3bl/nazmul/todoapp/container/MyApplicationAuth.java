@@ -36,14 +36,25 @@ public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
   if (user != null) {
     // user is signed in (auth or social)
-    // TODO: 11/8/16 user is signed in ... do something
+    _ctx.getStore().dispatch(MyApplicationActions.setUser(user));
 
   } else {
-    // user isn't signed in
-    // TODO: 11/8/16 kick off anonymous auth
-
+    // user isn't signed in, so kick off anon auth
+    _forceAnonSignIn();
   }
 
+}
+
+private void _forceAnonSignIn() {
+  _auth.signInAnonymously()
+       .addOnCompleteListener(
+         task -> {
+           Log.d(TAG, "_forceAnonSignIn: anon auth complete");
+           if (!task.isSuccessful()) {
+             Log.e(TAG, String.format("_forceAnonSignIn: problem with anon auth, %s",
+                                      task.getException()));
+           }
+         });
 }
 
 }// end class MyApplicationAuth
