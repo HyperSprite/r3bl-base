@@ -2,7 +2,7 @@
 // HyperSprite-TODO - More flow typing: 1 error
 import lodash from 'lodash';
 import * as actions from './actions';
-import { applicationContext } from './context';
+import {applicationContext} from './context';
 
 /**
  * these are initialized with null to match Firebase, since it doens't store any
@@ -19,7 +19,7 @@ const initialState = {
 
 function addTodo(state, action) {
   const todoText: string = action.payload;
-
+  
   if (!lodash.isNil(todoText)) {
     let dataCopy: DataIF = lodash.cloneDeep(state.data);
     const todoObject: TodoIF = {
@@ -27,7 +27,7 @@ function addTodo(state, action) {
       done: false,
     };
     if (lodash.isNil(dataCopy)) {
-      dataCopy = { todoArray: [todoObject] };
+      dataCopy = {todoArray: [todoObject]};
     } else {
       dataCopy.todoArray.push(todoObject);
     }
@@ -91,4 +91,4 @@ function reducerMain(state: ReduxStateIF, action: ReduxActionIF): ReduxStateIF {
   }
 }
 
-export { reducerMain, initialState };
+export {reducerMain, initialState};

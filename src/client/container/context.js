@@ -4,9 +4,9 @@ import firebase from 'firebase';
 import io from 'socket.io-client';
 import lodash from 'lodash';
 import events from 'events';
-import { createStore } from 'redux';
+import {createStore} from 'redux';
 
-import { GLOBAL_CONSTANTS, LOGGING_ENABLED, FIREBASE_CONFIG } from '../../global/constants';
+import {GLOBAL_CONSTANTS, LOGGING_ENABLED, FIREBASE_CONFIG} from '../../global/constants';
 import * as reducers from './reducers';
 import * as actions from './actions';
 import persistence from './firebase';
@@ -39,6 +39,7 @@ class ApplicationContext {
     // setup firebase presence
     presence(this);
   }
+  
   isProduction() {
     const hostname = window.location.hostname;
     if (!lodash.isEqual(hostname, 'localhost')) {
@@ -48,9 +49,11 @@ class ApplicationContext {
     // dev app
     return false;
   }
+  
   isDevelopment() {
     return !this.isProduction();
   }
+  
   /**
    * this generates a different URL depending on whether the code is running on
    * localhost or not.
@@ -74,6 +77,7 @@ class ApplicationContext {
   initSocket() {
     this.socket = new io.connect();
   }
+  
   /**
    * to access the socket for this context use this method ... you can emit()
    * using it, and you can attach on() listeners to this as well ... if you attach
@@ -84,6 +88,7 @@ class ApplicationContext {
   getSocket() {
     return this.socket;
   }
+  
   /**
    * this returns an ephermeral session id for this session ... will change every
    * time this session is restarted (ApplicationContext is created).
@@ -92,6 +97,7 @@ class ApplicationContext {
   getSessionId() {
     return this.sessionId;
   }
+  
   /**
    * is true if the user object is set, and it contains a uid field.
    * you can get the user object from getUser()
@@ -110,6 +116,7 @@ class ApplicationContext {
       return false;
     }
   }
+  
   /**
    * get a reference to the saved user object
    * @returns {UserIF}
@@ -121,6 +128,7 @@ class ApplicationContext {
       return null;
     }
   }
+  
   /** gets the uid field of the userObject */
   getUserId() {
     try {
@@ -129,6 +137,7 @@ class ApplicationContext {
       return null;
     }
   }
+  
   /**
    * get a reference to the saved data object
    * @returns {DataIF}
@@ -136,20 +145,24 @@ class ApplicationContext {
   getData(): DataIF {
     return this.getReduxState().data;
   }
+  
   /** this tells firebase to start sign-in using Google (vs anon auth) */
   forceSignIn() {
     persistence.forceSignIn(this);
   }
+  
   /** this tells firebase to initiate sign-out (of users who came in thru any
    *  auth providers - Google and anon) */
   forceSignOut() {
     persistence.forceSignOut(this);
   }
+  
   /** setup the internal firebase object */
   initFirebase() {
     this.firebase = firebase;
     this.firebase.initializeApp(FIREBASE_CONFIG);
   }
+  
   /**
    * get a ref to the firebase instance
    * @returns {firebase|*}
@@ -157,12 +170,14 @@ class ApplicationContext {
   getFirebase() {
     return this.firebase;
   }
+  
   /** this is a convenience method that allows you to get the firebase server
    * timestamp object
    */
   getFirebaseServerTimestampObject() {
     return this.firebase.database.ServerValue.TIMESTAMP;
   }
+  
   /**
    * get a ref to the firebase.database() instance
    * @returns {*|firebase.database.Database|!firebase.database.Database}
@@ -170,14 +185,17 @@ class ApplicationContext {
   getDatabase() {
     return this.firebase.database();
   }
+  
   /** creates the event emitter */
   initEventEmitter() {
     this.eventEmitter = new events.EventEmitter();
   }
+  
   /** disconnect the socket connection */
   disconnectSocket() {
     this.socket.disconnect();
   }
+  
   /** convenience method to emit an event to the server */
   emitToServer(eventName, payload) {
     if (LOGGING_ENABLED) {
@@ -186,6 +204,7 @@ class ApplicationContext {
     }
     this.socket.emit(eventName, payload);
   }
+  
   /** convenience method to emit an event */
   emit(eventName, payload) {
     if (LOGGING_ENABLED) {
@@ -194,6 +213,7 @@ class ApplicationContext {
     }
     this.eventEmitter.emit(eventName, payload);
   }
+  
   /** convenience method to listen to event
    * @returns the listener that is passed as param
    */
@@ -204,13 +224,16 @@ class ApplicationContext {
       }
       listener.apply(this, arguments);
     }
+    
     this.eventEmitter.addListener(eventName, loggingListener);
     return loggingListener;
   }
+  
   /** convenience method to remove listener for event */
   removeListener(eventName, listener) {
     this.eventEmitter.removeListener(eventName, listener);
   }
+  
   /**
    * initialize the redux store and get the actions and reducers wired up to it
    * this also tests to see if the browser is inDevelopment and if so, it will try and
@@ -245,6 +268,7 @@ class ApplicationContext {
     //   );
     // }
   }
+  
   /**
    * get a reference to the redux store
    * @returns {any}
@@ -252,6 +276,7 @@ class ApplicationContext {
   getReduxStore() {
     return this.reduxStore;
   }
+  
   /**
    * get a reference to the redux state
    * @returns {S}
@@ -274,13 +299,15 @@ function bindActionCreators(actionCreators, dispatch, ctx) {
     return _bindActionCreator(actionCreators, dispatch, ctx);
   }
   if (typeof actionCreators !== 'object' || actionCreators === null) {
-    throw new Error('bindActionCreators expected an object or a function, instead received ' +
+    throw new Error(
+      'bindActionCreators expected an object or a function, instead received ' +
       (actionCreators === null ? 'null' : typeof actionCreators) + '. ' +
       'Did you write "import actions from" instead of "import * as' +
-      ' actions from"?');
+      ' actions from"?'
+    );
   }
   const keys = Object.keys(actionCreators);
-
+  
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
     const actionCreator = actionCreators[key];
@@ -293,4 +320,4 @@ function bindActionCreators(actionCreators, dispatch, ctx) {
 /** create a singleton that will be used everywhere in the project */
 const applicationContext = new ApplicationContext();
 /** export the singleton */
-export { applicationContext, bindActionCreators };
+export {applicationContext, bindActionCreators};
