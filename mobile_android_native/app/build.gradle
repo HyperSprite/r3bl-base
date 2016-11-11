@@ -45,6 +45,7 @@ dependencies {
     compile 'com.github.brianegan.bansa:bansa:1.0.0-beta'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'org.apache.commons:commons-lang3:3.3.2'
+    compile 'com.google.code.gson:gson:2.8.0'
     testCompile 'junit:junit:4.12'
 }
 

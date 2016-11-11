@@ -1,5 +1,7 @@
 package com.r3bl.nazmul.todoapp.container;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
@@ -10,12 +12,15 @@ import java.util.ArrayList;
  */
 
 public class MyApplicationState implements Serializable {
-UserObject          user              = null;
-ArrayList<TodoItem> todoItemArrayList = null;
+UserObject          user      = null;
+ArrayList<TodoItem> todoArray = null;
 
 @Override
 public String toString() {
-  return String.format("Redux State: user=%s, data=%s", user, todoItemArrayList);
+  Gson gson = new GsonBuilder().setPrettyPrinting()
+                               .serializeNulls()
+                               .create();
+  return gson.toJson(this);
 }
 
 public MyApplicationState deepCopy() {
